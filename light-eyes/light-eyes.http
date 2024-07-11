@@ -1,0 +1,6 @@
+@light_eyes_HostAddress = http://localhost:5183
+
+GET {{light_eyes_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
