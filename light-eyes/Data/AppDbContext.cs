@@ -7,7 +7,7 @@ namespace light_eyes.Data;
 
 public class AppDbContext : IdentityDbContext<AppUser>
 {
-    public AppDbContext(DbContextOptions options) : base(options){ }
+    public AppDbContext(DbContextOptions options) : base(options){}
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -25,7 +25,6 @@ public class AppDbContext : IdentityDbContext<AppUser>
                 NormalizedName = "USER"
             }
         };
-        builder.Entity<IdentityRole>().HasData(Roles);
+        builder.Entity<IdentityRole>().HasData(roles);
     }
-    
 }

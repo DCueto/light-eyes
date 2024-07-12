@@ -12,8 +12,8 @@ using light_eyes.Data;
 namespace light_eyes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240711075726_Identity")]
-    partial class Identity
+    [Migration("20240712093031_tabla")]
+    partial class tabla
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,20 @@ namespace light_eyes.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b27b4fc4-3b06-4d59-858a-a233549ecdb1",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "0aad3e66-22d9-400c-8e81-f3c65a3829e7",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

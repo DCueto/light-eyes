@@ -147,3 +147,4 @@ C:\Users\Facto\Documents\proyectos\c-sharp\light-eyes\light-eyes\obj\Debug\net8.
 C:\Users\Facto\Documents\proyectos\c-sharp\light-eyes\light-eyes\obj\Debug\net8.0\light-eyes.genruntimeconfig.cache
 C:\Users\Facto\Documents\proyectos\c-sharp\light-eyes\light-eyes\obj\Debug\net8.0\ref\light-eyes.dll
 C:\Users\Facto\Documents\proyectos\c-sharp\light-eyes\light-eyes\bin\Debug\net8.0\System.Text.Json.dll
+C:\Users\Facto\Documents\proyectos\c-sharp\light-eyes\light-eyes\obj\Debug\net8.0\light-eyes.sourcelink.json

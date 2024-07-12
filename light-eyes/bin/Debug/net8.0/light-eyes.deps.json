@@ -16,7 +16,8 @@
           "Microsoft.EntityFrameworkCore.Tools": "8.0.7",
           "Microsoft.Extensions.Identity.Core": "8.0.7",
           "Microsoft.IdentityModel.Tokens": "7.6.3",
-          "Swashbuckle.AspNetCore": "6.4.0"
+          "Swashbuckle.AspNetCore": "6.4.0",
+          "System.Text.Json": "8.0.4"
         },
         "runtime": {
           "light-eyes.dll": {}
