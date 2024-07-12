@@ -1,5 +1,6 @@
 using light_eyes.Data;
 using light_eyes.Models;
+using light_eyes.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
@@ -19,7 +20,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 6;
-
 }).AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAuthentication(options =>
 {
@@ -51,6 +51,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -65,4 +66,3 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 app.Run();
-

@@ -1,26 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Facto\\Documents\\proyectos\\c-sharp\\light-eyes\\light-eyes\\light-eyes.csproj": {}
+    "C:\\Users\\matri\\Documents\\factoriaF5\\RiderProjects\\light-eyes\\light-eyes\\light-eyes.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Facto\\Documents\\proyectos\\c-sharp\\light-eyes\\light-eyes\\light-eyes.csproj": {
+    "C:\\Users\\matri\\Documents\\factoriaF5\\RiderProjects\\light-eyes\\light-eyes\\light-eyes.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Facto\\Documents\\proyectos\\c-sharp\\light-eyes\\light-eyes\\light-eyes.csproj",
+        "projectUniqueName": "C:\\Users\\matri\\Documents\\factoriaF5\\RiderProjects\\light-eyes\\light-eyes\\light-eyes.csproj",
         "projectName": "light-eyes",
-        "projectPath": "C:\\Users\\Facto\\Documents\\proyectos\\c-sharp\\light-eyes\\light-eyes\\light-eyes.csproj",
-        "packagesPath": "C:\\Users\\Facto\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Facto\\Documents\\proyectos\\c-sharp\\light-eyes\\light-eyes\\obj\\",
+        "projectPath": "C:\\Users\\matri\\Documents\\factoriaF5\\RiderProjects\\light-eyes\\light-eyes\\light-eyes.csproj",
+        "packagesPath": "C:\\Users\\matri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matri\\Documents\\factoriaF5\\RiderProjects\\light-eyes\\light-eyes\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Facto\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\matri\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +44,7 @@
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.6, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
               "target": "Package",
@@ -53,7 +52,7 @@
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[8.0.6, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -72,6 +71,10 @@
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[7.6.3, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[8.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
