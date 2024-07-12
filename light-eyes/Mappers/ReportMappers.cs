@@ -12,7 +12,8 @@ public static class ReportMappers
             ReportId = reportModel.ReportId,
             Name = reportModel.Name,
             CreatedDate = reportModel.CreatedDate,
-            EndDate = reportModel.EndDate
+            EndDate = reportModel.EndDate,
+            Language = reportModel.Language
         };
     }
 
@@ -22,7 +23,8 @@ public static class ReportMappers
         {
             Name= reportDto.Name,
             CreatedDate = reportDto.CreatedDate,
-            EndDate = reportDto.EndDate
+            EndDate = reportDto.EndDate,
+            Language = reportDto.Language
         };
     }
 
@@ -32,7 +34,8 @@ public static class ReportMappers
         {
             Name = updateReportDto.Name,
             CreatedDate = updateReportDto.CreatedDate,
-            EndDate = updateReportDto.EndDate
+            EndDate = updateReportDto.EndDate,
+            Language = updateReportDto.Language
         };
     }
 }

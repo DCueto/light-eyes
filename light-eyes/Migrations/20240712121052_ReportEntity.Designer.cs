@@ -12,7 +12,7 @@ using light_eyes.Data;
 namespace light_eyes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240711104851_ReportEntity")]
+    [Migration("20240712121052_ReportEntity")]
     partial class ReportEntity
     {
         /// <inheritdoc />
@@ -236,6 +236,10 @@ namespace light_eyes.Migrations
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

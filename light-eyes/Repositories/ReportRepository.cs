@@ -42,6 +42,7 @@ public class ReportRepository : IReportRepository
         existingReport.Name = updateReportDto.Name;
         existingReport.CreatedDate = updateReportDto.CreatedDate;
         existingReport.EndDate = updateReportDto.EndDate;
+        existingReport.Language = existingReport.Language;
 
         await _context.SaveChangesAsync();
 
