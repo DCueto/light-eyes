@@ -47,6 +47,20 @@ namespace light_eyes.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1ced12e7-912b-4ce3-8fb0-8a58e1b31543",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -247,6 +261,21 @@ namespace light_eyes.Migrations
                     b.ToTable("Report");
                 });
 
+            modelBuilder.Entity("light_eyes.Models.Report_Section", b =>
+                {
+                    b.Property<int>("SectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReportId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SectionId", "ReportId");
+
+                    b.HasIndex("ReportId");
+
+                    b.ToTable("ReportSections");
+                });
+
             modelBuilder.Entity("light_eyes.Models.Section", b =>
                 {
                     b.Property<int>("SectionId")
@@ -329,6 +358,35 @@ namespace light_eyes.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("light_eyes.Models.Report_Section", b =>
+                {
+                    b.HasOne("light_eyes.Models.Report", "Report")
+                        .WithMany("ReportSections")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("light_eyes.Models.Section", "Section")
+                        .WithMany("ReportSections")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Report");
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.Report", b =>
+                {
+                    b.Navigation("ReportSections");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.Section", b =>
+                {
+                    b.Navigation("ReportSections");
                 });
 #pragma warning restore 612, 618
         }

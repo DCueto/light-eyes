@@ -15,6 +15,20 @@ public class AppDbContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        
+        builder.Entity<Report_Section>(x => x.HasKey(p => new { p.SectionId, p.ReportId }));
+        
+        builder.Entity<Report>()
+            .HasMany(rs => rs.ReportSections)
+            .WithOne(rp => rp.Report)
+            .HasForeignKey(rp => rp.ReportId);
+
+        builder.Entity<Section>()
+            .HasMany(sc => sc.ReportSections)
+            .WithOne(rs => rs.Section)
+            .HasForeignKey(rp => rp.SectionId);
+
+        
         List<IdentityRole> roles = new List<IdentityRole>
         {
             new IdentityRole
@@ -29,5 +43,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
             }
         };
         builder.Entity<IdentityRole>().HasData(roles);
+
+      
     }
 }

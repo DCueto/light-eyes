@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace light_eyes.Migrations
 {
     /// <inheritdoc />
-    public partial class ReportEntity : Migration
+    public partial class ReportSection : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,6 +66,23 @@ namespace light_eyes.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Report", x => x.ReportId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Section",
+                columns: table => new
+                {
+                    SectionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Section", x => x.SectionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -172,6 +191,39 @@ namespace light_eyes.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ReportSections",
+                columns: table => new
+                {
+                    ReportId = table.Column<int>(type: "int", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReportSections", x => new { x.SectionId, x.ReportId });
+                    table.ForeignKey(
+                        name: "FK_ReportSections_Report_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "Report",
+                        principalColumn: "ReportId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReportSections_Section_SectionId",
+                        column: x => x.SectionId,
+                        principalTable: "Section",
+                        principalColumn: "SectionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57", null, "User", "USER" },
+                    { "1ced12e7-912b-4ce3-8fb0-8a58e1b31543", null, "Admin", "ADMIN" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -210,6 +262,11 @@ namespace light_eyes.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReportSections_ReportId",
+                table: "ReportSections",
+                column: "ReportId");
         }
 
         /// <inheritdoc />
@@ -231,13 +288,19 @@ namespace light_eyes.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Report");
+                name: "ReportSections");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Report");
+
+            migrationBuilder.DropTable(
+                name: "Section");
         }
     }
 }

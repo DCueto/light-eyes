@@ -11,4 +11,6 @@ public class Section
     public string Content { get; set; }
     public string Type { get; set; }
     public string Language { get; set; }
+
+    public ICollection<Report_Section> ReportSections { get; set; } = new List<Report_Section>();
 }
