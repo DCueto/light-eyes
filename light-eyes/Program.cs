@@ -52,6 +52,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
