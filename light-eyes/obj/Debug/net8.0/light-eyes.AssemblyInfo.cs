@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("light-eyes")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c17aaf7baa03ad801a71aec06fc0eb29c3008475")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e4615c8974c238b86bd2b30e072068800dd001dc")]
 [assembly: System.Reflection.AssemblyProductAttribute("light-eyes")]
 [assembly: System.Reflection.AssemblyTitleAttribute("light-eyes")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

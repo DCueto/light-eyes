@@ -11,6 +11,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
     public DbSet<Report> Report { get; set; }
     public DbSet<Section> Section { get; set; }
+    
+    public DbSet<Report_Section> ReportSections {get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -43,7 +45,6 @@ public class AppDbContext : IdentityDbContext<AppUser>
             }
         };
         builder.Entity<IdentityRole>().HasData(roles);
-
-      
+        
     }
 }
