@@ -55,6 +55,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<ICheckListRepository, CheckListRepository>();
+// builder.Services.AddScoped<ICheckListItemRepository, CheckListItemRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {

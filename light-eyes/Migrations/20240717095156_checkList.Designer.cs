@@ -12,8 +12,8 @@ using light_eyes.Data;
 namespace light_eyes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240715122751_Report-Section")]
-    partial class ReportSection
+    [Migration("20240717095156_checkList")]
+    partial class checkList
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,13 +54,13 @@ namespace light_eyes.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1ced12e7-912b-4ce3-8fb0-8a58e1b31543",
+                            Id = "a870c5c2-d08a-4b63-855a-d935de8c877f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57",
+                            Id = "1dcc8cef-263c-4a84-894e-362ed0d2f886",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -235,6 +235,41 @@ namespace light_eyes.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckList", b =>
+                {
+                    b.Property<int>("CheckListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CheckListId"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CheckListId");
+
+                    b.ToTable("CheckList");
                 });
 
             modelBuilder.Entity("light_eyes.Models.Report", b =>

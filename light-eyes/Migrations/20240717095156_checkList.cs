@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace light_eyes.Migrations
 {
     /// <inheritdoc />
-    public partial class ReportSection : Migration
+    public partial class checkList : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,24 @@ namespace light_eyes.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheckList",
+                columns: table => new
+                {
+                    CheckListId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckList", x => x.CheckListId);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,8 +238,8 @@ namespace light_eyes.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57", null, "User", "USER" },
-                    { "1ced12e7-912b-4ce3-8fb0-8a58e1b31543", null, "Admin", "ADMIN" }
+                    { "1dcc8cef-263c-4a84-894e-362ed0d2f886", null, "User", "USER" },
+                    { "a870c5c2-d08a-4b63-855a-d935de8c877f", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -286,6 +304,9 @@ namespace light_eyes.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CheckList");
 
             migrationBuilder.DropTable(
                 name: "ReportSections");

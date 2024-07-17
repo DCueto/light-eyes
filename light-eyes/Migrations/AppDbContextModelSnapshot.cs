@@ -51,13 +51,13 @@ namespace light_eyes.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1ced12e7-912b-4ce3-8fb0-8a58e1b31543",
+                            Id = "72b44963-e2b2-4d84-83bf-81bfddb5f609",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57",
+                            Id = "8df2b7b8-bd0e-48e1-bf20-ddc5b724de66",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -232,6 +232,69 @@ namespace light_eyes.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckList", b =>
+                {
+                    b.Property<int>("CheckListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CheckListId"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CheckListId");
+
+                    b.ToTable("CheckList");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItem", b =>
+                {
+                    b.Property<int>("CheckListItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CheckListItemId"));
+
+                    b.Property<int>("CheckListId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CheckListItemId");
+
+                    b.ToTable("CheckListItem");
                 });
 
             modelBuilder.Entity("light_eyes.Models.Report", b =>

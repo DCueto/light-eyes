@@ -11,8 +11,10 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
     public DbSet<Report> Report { get; set; }
     public DbSet<Section> Section { get; set; }
-    
     public DbSet<Report_Section> ReportSections {get; set; }
+    
+    public DbSet<CheckList> CheckList { get; set; }
+    public DbSet<CheckListItem> CheckListItem { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
