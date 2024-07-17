@@ -31,9 +31,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DTO\Comment\" />
-      <Folder Include="DTO\Stock\" />
-    </ItemGroup>
-
 </Project>
