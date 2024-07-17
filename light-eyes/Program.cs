@@ -1,6 +1,7 @@
 using light_eyes.Data;
 using light_eyes.Interfaces;
 using light_eyes.Models;
+using light_eyes.Repositories;
 using light_eyes.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +23,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 6;
-
 }).AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAuthentication(options =>
 {
@@ -52,6 +52,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     var connection = conStrBuilder.ConnectionString;
     options.UseSqlServer(connection);
 });
+
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -99,4 +103,3 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 app.Run();
-
