@@ -10,4 +10,5 @@ public interface ICheckListItemRepository
     Task<CheckListItem> CreateAsync(CheckListItem checkModel);
     Task<CheckListItem?> UpdateAsync(int id, UpdateCheckListItemDto updateCheckListItemDto);
     Task<CheckListItem?> DeleteAsync(int id);
+    Task<bool> ExistsAsync(int checkListItemId);
 }

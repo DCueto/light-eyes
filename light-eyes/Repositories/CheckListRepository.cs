@@ -34,7 +34,7 @@ public class CheckListRepository : ICheckListRepository
 
     public async Task<CheckList?> UpdateAsync(int id, UpdateCheckListDto updateCheckListDto)
     {
-        var existingCheckList = await _context.CheckList.FirstOrDefaultAsync(X=> X.CheckListId == id);
+        var existingCheckList = await _context.CheckList.FirstOrDefaultAsync(x=> x.CheckListId == id);
         if (existingCheckList == null)
         {
             return null;
@@ -62,5 +62,10 @@ public class CheckListRepository : ICheckListRepository
         _context.CheckList.Remove(checkListModel);
         await _context.SaveChangesAsync();
         return checkListModel;
+    }
+
+    public async Task<bool> ExistsAsync(int checklistId)
+    {
+        return await _context.CheckList.AnyAsync(c => c.CheckListId == checklistId);
     }
 }

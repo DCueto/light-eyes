@@ -60,4 +60,9 @@ public class CheckListItemRepository : ICheckListItemRepository
         await _context.SaveChangesAsync();
         return checkListItemModel;
     }
+
+    public async Task<bool> ExistsAsync(int checkListItemId)
+    {
+        return await _context.CheckListItem.AnyAsync(cl => cl.CheckListItemId == checkListItemId);
+    }
 }

@@ -51,13 +51,13 @@ namespace light_eyes.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3b67a278-700f-404a-99f0-5a34f13f562a",
+                            Id = "82778cbf-ff90-40d8-b430-3bf661771a48",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "22564874-e66c-490a-b8c7-adf6203e28e1",
+                            Id = "14bc5787-692b-4efa-87db-003026cd18b3",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -294,6 +294,8 @@ namespace light_eyes.Migrations
 
                     b.HasKey("CheckListItemId");
 
+                    b.HasIndex("CheckListId");
+
                     b.ToTable("CheckListItem");
                 });
 
@@ -324,6 +326,8 @@ namespace light_eyes.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CheckListItemOptionId");
+
+                    b.HasIndex("CheckListItemId");
 
                     b.ToTable("CheckListItemOption");
                 });
@@ -454,6 +458,28 @@ namespace light_eyes.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("light_eyes.Models.CheckListItem", b =>
+                {
+                    b.HasOne("light_eyes.Models.CheckList", "CheckList")
+                        .WithMany("CheckListItems")
+                        .HasForeignKey("CheckListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckList");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItemOption", b =>
+                {
+                    b.HasOne("light_eyes.Models.CheckListItem", "CheckListItem")
+                        .WithMany("CheckListItemOptions")
+                        .HasForeignKey("CheckListItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckListItem");
+                });
+
             modelBuilder.Entity("light_eyes.Models.Report_Section", b =>
                 {
                     b.HasOne("light_eyes.Models.Report", "Report")
@@ -471,6 +497,16 @@ namespace light_eyes.Migrations
                     b.Navigation("Report");
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckList", b =>
+                {
+                    b.Navigation("CheckListItems");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItem", b =>
+                {
+                    b.Navigation("CheckListItemOptions");
                 });
 
             modelBuilder.Entity("light_eyes.Models.Report", b =>

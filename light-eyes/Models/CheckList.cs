@@ -12,5 +12,8 @@ public class CheckList
     public DateTime CreatedDate { get; set; }
     public string Language { get; set; }
     
+    
     public int UserId { get; set; }
+
+    public List<CheckListItem> CheckListItems { get; set; } = new List<CheckListItem>();
 }

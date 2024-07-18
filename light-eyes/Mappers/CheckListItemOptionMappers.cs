@@ -13,18 +13,20 @@ public static class CheckListItemOptionMappers
             Name = checkOptionModel.Name,
             Content = checkOptionModel.Content,
             IsPositive = checkOptionModel.IsPositive,
-            Language = checkOptionModel.Language
+            Language = checkOptionModel.Language,
+            CheckListItemId = checkOptionModel.CheckListItemId
         };
     }
 
-    public static CheckListItemOption ToCheckListItemOptionFromCreateDto(this CreateCheckListItemOptionDto checkOptionDto)
+    public static CheckListItemOption ToCheckListItemOptionFromCreateDto(this CreateCheckListItemOptionDto checkOptionDto, int checkListItemId)
     {
         return new CheckListItemOption()
         {
             Name = checkOptionDto.Name,
             Content = checkOptionDto.Content,
             IsPositive = checkOptionDto.IsPositive,
-            Language = checkOptionDto.Language
+            Language = checkOptionDto.Language,
+            CheckListItemId = checkListItemId
         };
     }
 

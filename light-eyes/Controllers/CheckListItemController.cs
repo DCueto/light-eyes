@@ -10,12 +10,14 @@ namespace light_eyes.Controllers
     public class CheckListItemController : ControllerBase
     {
         private readonly ICheckListItemRepository _repository;
+        private readonly ICheckListRepository _checkListRepository;
 
-        public CheckListItemController(ICheckListItemRepository checkListItemRepository)
+        public CheckListItemController(ICheckListItemRepository repository, ICheckListRepository checkListRepository)
         {
-            _repository = checkListItemRepository;
+            _repository = repository;
+            _checkListRepository = checkListRepository;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAllSections()
         {
@@ -30,17 +32,22 @@ namespace light_eyes.Controllers
             var checkGetById = await _repository.GetByIdAsync(id);
             if (checkGetById == null)
             {
-                return
-                    NotFound();
+                return NotFound();
             }
-
+            
             return Ok(checkGetById.ToCheckListItemDto());
         }
         
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCheckListItemDto checkDto)
+        [HttpPost("{checklistId:int}")]
+        public async Task<IActionResult> Create([FromBody] CreateCheckListItemDto checkDto, [FromRoute] int checklistId)
         {
-            var checkListItemModel = checkDto.ToCheckListItemFromCreateDto();
+            var checklistExists = await _checkListRepository.ExistsAsync(checklistId);
+            if (checklistExists == false)
+            {
+                return NotFound($"Checklist with id {checklistId} doesn't exists");
+            }
+            
+            var checkListItemModel = checkDto.ToCheckListItemFromCreateDto(checklistId);
             await _repository.CreateAsync(checkListItemModel);
             return CreatedAtAction(nameof(GetById), new { id = checkListItemModel.CheckListItemId }, checkListItemModel.ToCheckListItemDto());
         }

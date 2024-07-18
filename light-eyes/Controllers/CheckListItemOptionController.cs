@@ -10,10 +10,12 @@ namespace light_eyes.Controllers
     public class CheckListItemOptionController : ControllerBase
     {
         private readonly ICheckListItemOptionRepository _repository;
+        private readonly ICheckListItemRepository _checkListItemRepository;
 
-        public CheckListItemOptionController(ICheckListItemOptionRepository checkOptionRepository)
+        public CheckListItemOptionController(ICheckListItemOptionRepository checkOptionRepository, ICheckListItemRepository checkListItemRepository)
         {
             _repository = checkOptionRepository;
+            _checkListItemRepository = checkListItemRepository;
         }
 
         [HttpGet]
@@ -36,10 +38,15 @@ namespace light_eyes.Controllers
             return Ok(checkItemOption.ToCheckListItemOptionDto());
         }
         
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCheckListItemOptionDto checkOptionDto)
+        [HttpPost("{checkListItemId:int}")]
+        public async Task<IActionResult> Create([FromBody] CreateCheckListItemOptionDto checkOptionDto, [FromRoute] int checkListItemId)
         {
-            var checkOptionModel = checkOptionDto.ToCheckListItemOptionFromCreateDto();
+            var checkListItemExists = await _checkListItemRepository.ExistsAsync(checkListItemId);
+            if (checkListItemExists == false)
+            {
+                return NotFound();
+            }
+            var checkOptionModel = checkOptionDto.ToCheckListItemOptionFromCreateDto(checkListItemId);
             await _repository.CreateAsync(checkOptionModel);
             return CreatedAtAction(nameof(GetById), new { id = checkOptionModel.CheckListItemOptionId }, checkOptionModel.ToCheckListItemOptionDto());
         }
