@@ -57,6 +57,7 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<ISectionRepository, SectionRepository>();
 builder.Services.AddScoped<ICheckListRepository, CheckListRepository>();
 builder.Services.AddScoped<ICheckListItemRepository, CheckListItemRepository>();
+builder.Services.AddScoped<ICheckListItemOptionRepository, CheckListItemOptionRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {

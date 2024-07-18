@@ -30,8 +30,7 @@ namespace light_eyes.Controllers
             var section = await _repository.GetByIdAsync(id);
             if (section == null)
             {
-                return
-                    NotFound();
+                return NotFound();
             }
 
             return Ok(section.ToSectionDto());
