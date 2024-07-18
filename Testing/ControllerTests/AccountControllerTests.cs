@@ -45,5 +45,31 @@ public class AccountControllerTests
         Assert.IsType<SerializableError>(badRequestResult.Value);
     }
 
+    [Fact]
+    public async Task Register_ValidData_ReturnsOkResult()
+    {
+        var registerDto = new RegisterDto
+        {
+            UserName = "testUser",
+            Email = "test@test.com",
+            Password = "P@ssw0rd"
+        };
+
+        _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Success);
+        _userManagerMock.Setup(m => m.AddToRoleAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Success);
+        _tokenserviceMock.Setup(m => m.CreateToken(It.IsAny<AppUser>()))
+            .Returns("testtoken");
+
+        var result = await _accountController.Register(registerDto);
+
+        var okObjectResult = Assert.IsType<OkObjectResult>(result);
+        var newUserDto = Assert.IsType<NewUserDto>(okObjectResult.Value);
+        Assert.Equal(registerDto.UserName, newUserDto.UserName);
+        Assert.Equal(registerDto.Email, newUserDto.Email);
+        Assert.Equal("testtoken", newUserDto.Token);
+    }
+
     
 }
