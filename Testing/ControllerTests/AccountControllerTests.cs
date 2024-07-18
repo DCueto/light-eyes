@@ -71,5 +71,17 @@ public class AccountControllerTests
         Assert.Equal("testtoken", newUserDto.Token);
     }
 
+    [Fact]
+    public async Task Register_InvalidModel_ReturnsBadRequest()
+    {
+        var registerDto = new RegisterDto();
+        _accountController.ModelState.AddModelError("UserName", "UserName is required");
+
+        var result = await _accountController.Register(registerDto);
+
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.IsType<SerializableError>(badRequestResult.Value);
+    }
+
     
 }
