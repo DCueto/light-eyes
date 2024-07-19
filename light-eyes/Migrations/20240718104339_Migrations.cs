@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace light_eyes.Migrations
 {
     /// <inheritdoc />
-    public partial class ReportSection : Migration
+    public partial class Migrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,6 +50,24 @@ namespace light_eyes.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheckList",
+                columns: table => new
+                {
+                    CheckListId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckList", x => x.CheckListId);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +210,28 @@ namespace light_eyes.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CheckListItem",
+                columns: table => new
+                {
+                    CheckListItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CheckListId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckListItem", x => x.CheckListItemId);
+                    table.ForeignKey(
+                        name: "FK_CheckListItem_CheckList_CheckListId",
+                        column: x => x.CheckListId,
+                        principalTable: "CheckList",
+                        principalColumn: "CheckListId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ReportSections",
                 columns: table => new
                 {
@@ -215,13 +255,36 @@ namespace light_eyes.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CheckListItemOption",
+                columns: table => new
+                {
+                    CheckListItemOptionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsPositive = table.Column<bool>(type: "bit", nullable: false),
+                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CheckListItemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckListItemOption", x => x.CheckListItemOptionId);
+                    table.ForeignKey(
+                        name: "FK_CheckListItemOption_CheckListItem_CheckListItemId",
+                        column: x => x.CheckListItemId,
+                        principalTable: "CheckListItem",
+                        principalColumn: "CheckListItemId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57", null, "User", "USER" },
-                    { "1ced12e7-912b-4ce3-8fb0-8a58e1b31543", null, "Admin", "ADMIN" }
+                    { "14bc5787-692b-4efa-87db-003026cd18b3", null, "User", "USER" },
+                    { "82778cbf-ff90-40d8-b430-3bf661771a48", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -264,6 +327,16 @@ namespace light_eyes.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CheckListItem_CheckListId",
+                table: "CheckListItem",
+                column: "CheckListId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CheckListItemOption_CheckListItemId",
+                table: "CheckListItemOption",
+                column: "CheckListItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReportSections_ReportId",
                 table: "ReportSections",
                 column: "ReportId");
@@ -288,6 +361,9 @@ namespace light_eyes.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CheckListItemOption");
+
+            migrationBuilder.DropTable(
                 name: "ReportSections");
 
             migrationBuilder.DropTable(
@@ -297,10 +373,16 @@ namespace light_eyes.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "CheckListItem");
+
+            migrationBuilder.DropTable(
                 name: "Report");
 
             migrationBuilder.DropTable(
                 name: "Section");
+
+            migrationBuilder.DropTable(
+                name: "CheckList");
         }
     }
 }

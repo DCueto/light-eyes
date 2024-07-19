@@ -1,4 +1,5 @@
 using light_eyes.Data;
+using light_eyes.Extensions;
 using light_eyes.Interfaces;
 using light_eyes.Models;
 using light_eyes.Repositories;
@@ -47,14 +48,18 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
-    conStrBuilder.Password = builder.Configuration["DbPassword"];
-    var connection = conStrBuilder.ConnectionString;
-    options.UseSqlServer(connection);
+    // var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
+    // conStrBuilder.Password = builder.Configuration["DbPassword"];
+    // var connection = conStrBuilder.ConnectionString;
+    // options.UseSqlServer(connection);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<ICheckListRepository, CheckListRepository>();
+builder.Services.AddScoped<ICheckListItemRepository, CheckListItemRepository>();
+builder.Services.AddScoped<ICheckListItemOptionRepository, CheckListItemOptionRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -102,4 +107,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
+
+app.CreateDbIfNotExists();
 app.Run();
