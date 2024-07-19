@@ -11,8 +11,12 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
     public DbSet<Report> Report { get; set; }
     public DbSet<Section> Section { get; set; }
-    
     public DbSet<Report_Section> ReportSections {get; set; }
+    
+    
+    public DbSet<CheckList> CheckList { get; set; }
+    public DbSet<CheckListItem> CheckListItem { get; set; }
+    public DbSet<CheckListItemOption> CheckListItemOption { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -20,16 +24,24 @@ public class AppDbContext : IdentityDbContext<AppUser>
         
         builder.Entity<Report_Section>(x => x.HasKey(p => new { p.SectionId, p.ReportId }));
         
-        builder.Entity<Report>()
-            .HasMany(rs => rs.ReportSections)
-            .WithOne(rp => rp.Report)
+        builder.Entity<Report_Section>()
+            .HasOne(rs => rs.Report)
+            .WithMany(rp => rp.ReportSections)
             .HasForeignKey(rp => rp.ReportId);
 
-        builder.Entity<Section>()
-            .HasMany(sc => sc.ReportSections)
-            .WithOne(rs => rs.Section)
+        builder.Entity<Report_Section>()
+            .HasOne(sc => sc.Section)
+            .WithMany(rs => rs.ReportSections)
             .HasForeignKey(rp => rp.SectionId);
 
+        // builder.Entity<CheckList>()
+        //     .HasMany(ci => ci.CheckListItems)
+        //     .WithOne(cl => cl.CheckListItemId)
+        //     .HasForeignKey(cl => cl.CheckListId);
+
+        
+        
+        
         
         List<IdentityRole> roles = new List<IdentityRole>
         {

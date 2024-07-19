@@ -1,6 +1,6 @@
 using light_eyes.DTOs;
+using light_eyes.Interfaces;
 using light_eyes.Mappers;
-using light_eyes.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace light_eyes.Controllers
@@ -30,8 +30,7 @@ namespace light_eyes.Controllers
             var section = await _repository.GetByIdAsync(id);
             if (section == null)
             {
-                return
-                    NotFound();
+                return NotFound();
             }
 
             return Ok(section.ToSectionDto());

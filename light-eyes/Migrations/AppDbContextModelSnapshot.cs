@@ -51,13 +51,13 @@ namespace light_eyes.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1ced12e7-912b-4ce3-8fb0-8a58e1b31543",
+                            Id = "82778cbf-ff90-40d8-b430-3bf661771a48",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0a5819ba-6c78-47ad-9cb5-3f6ecd824a57",
+                            Id = "14bc5787-692b-4efa-87db-003026cd18b3",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -234,6 +234,104 @@ namespace light_eyes.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("light_eyes.Models.CheckList", b =>
+                {
+                    b.Property<int>("CheckListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CheckListId"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CheckListId");
+
+                    b.ToTable("CheckList");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItem", b =>
+                {
+                    b.Property<int>("CheckListItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CheckListItemId"));
+
+                    b.Property<int>("CheckListId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CheckListItemId");
+
+                    b.HasIndex("CheckListId");
+
+                    b.ToTable("CheckListItem");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItemOption", b =>
+                {
+                    b.Property<int>("CheckListItemOptionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CheckListItemOptionId"));
+
+                    b.Property<int>("CheckListItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPositive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CheckListItemOptionId");
+
+                    b.HasIndex("CheckListItemId");
+
+                    b.ToTable("CheckListItemOption");
+                });
+
             modelBuilder.Entity("light_eyes.Models.Report", b =>
                 {
                     b.Property<int>("ReportId")
@@ -360,6 +458,28 @@ namespace light_eyes.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("light_eyes.Models.CheckListItem", b =>
+                {
+                    b.HasOne("light_eyes.Models.CheckList", "CheckList")
+                        .WithMany("CheckListItems")
+                        .HasForeignKey("CheckListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckList");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItemOption", b =>
+                {
+                    b.HasOne("light_eyes.Models.CheckListItem", "CheckListItem")
+                        .WithMany("CheckListItemOptions")
+                        .HasForeignKey("CheckListItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CheckListItem");
+                });
+
             modelBuilder.Entity("light_eyes.Models.Report_Section", b =>
                 {
                     b.HasOne("light_eyes.Models.Report", "Report")
@@ -377,6 +497,16 @@ namespace light_eyes.Migrations
                     b.Navigation("Report");
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckList", b =>
+                {
+                    b.Navigation("CheckListItems");
+                });
+
+            modelBuilder.Entity("light_eyes.Models.CheckListItem", b =>
+                {
+                    b.Navigation("CheckListItemOptions");
                 });
 
             modelBuilder.Entity("light_eyes.Models.Report", b =>

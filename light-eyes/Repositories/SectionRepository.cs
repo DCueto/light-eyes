@@ -1,5 +1,6 @@
 ﻿using light_eyes.Data;
 using light_eyes.DTOs;
+using light_eyes.Interfaces;
 using light_eyes.Models;
 using Microsoft.EntityFrameworkCore;
 
