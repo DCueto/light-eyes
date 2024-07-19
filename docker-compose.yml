@@ -11,6 +11,7 @@ services:
     environment:
       - ACCEPT_EULA=Y   # Accept the End-User License Agreement
       - SA_PASSWORD=LightEyesP@ssw0rd # Set the 'sa' user password
+      - MSSQL_PID=Express
     ports:
       - "8002:1433"
     networks:
