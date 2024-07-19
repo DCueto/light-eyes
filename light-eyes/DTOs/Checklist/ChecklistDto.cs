@@ -1,11 +1,11 @@
-namespace light_eyes.DTOs.Checklist;
+﻿namespace light_eyes.DTOs.CheckList;
 
-public class ChecklistDto
+public class CheckListDto
 {
-    public int ChecklistId { get; set; }
+    public int CheckListId { get; set; }
     public string Name { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
+    public DateTime CreatedDate { get; set; }
     public string Language { get; set; }
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
 }
