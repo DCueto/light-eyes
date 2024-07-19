@@ -4,20 +4,21 @@ networks:
   light-eyes-net:
 
 services:
-  sql-server:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sql-server-container
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql-container
     platform: linux/amd64  # Specify platform
     environment:
       - ACCEPT_EULA=Y   # Accept the End-User License Agreement
-      - SA_PASSWORD=LightEyesP@ssw0rd # Set the 'sa' user password
-      - MSSQL_PID=Express
+      - POSTGRES_DB=webApi
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=LightEyesP@ssw0rd # Set the 'sa' user password
     ports:
-      - "8002:1433"
+      - "8002:5432"
     networks:
       - light-eyes-net
     volumes:
-      - sql-server-container-data:/var/opt/mssql
+      - postgresql-container-data:/var/opt/mssql
   light-eyes-api:
     container_name: light-eyes-api
     image: ${DOCKER_REGISTRY-}light-eyes-api
@@ -27,9 +28,9 @@ services:
       context: .
       dockerfile: light-eyes/Dockerfile
     depends_on:
-      - sql-server
+      - postgresql
     networks:
       - light-eyes-net
 
 volumes:
-  sql-server-container-data:
+  postgresql-container-data:
