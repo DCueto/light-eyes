@@ -48,10 +48,6 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    // var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
-    // conStrBuilder.Password = builder.Configuration["DbPassword"];
-    // var connection = conStrBuilder.ConnectionString;
-    // options.UseSqlServer(connection);
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
