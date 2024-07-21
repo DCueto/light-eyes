@@ -103,5 +103,5 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 
-app.CreateDbIfNotExists();
-app.Run();
+await app.CreateDbIfNotExists();
+await app.RunAsync();
