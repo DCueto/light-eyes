@@ -14,7 +14,7 @@ services:
       - POSTGRES_USER=sa
       - POSTGRES_PASSWORD=LightEyesP@ssw0rd # Set the 'sa' user password
     ports:
-      - "8002:5432"
+      - "5432:5432"
     networks:
       - light-eyes-net
     volumes:
@@ -23,7 +23,7 @@ services:
     container_name: light-eyes-api
     image: ${DOCKER_REGISTRY-}light-eyes-api
     ports:
-      - "8001:80"
+      - "80:80"
     build:
       context: .
       dockerfile: light-eyes/Dockerfile
@@ -31,6 +31,9 @@ services:
       - postgresql
     networks:
       - light-eyes-net
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=localhost;Port=5432;Database=webApi;Username=sa;Password=LightEyesP@ssw0rd;TrustServerCertificate=True
 
 volumes:
   postgresql-container-data:
