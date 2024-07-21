@@ -5,7 +5,7 @@ namespace light_eyes.Extensions;
 
 public static class StartupDbExtensions
 {
-    public static async void CreateDbIfNotExists(this IHost host)
+    public static async Task CreateDbIfNotExists(this IHost host)
     {
         using var scope = host.Services.CreateScope();
         var services = scope.ServiceProvider;
@@ -14,8 +14,8 @@ public static class StartupDbExtensions
 
         try
         {
-            dbContextService.Database.EnsureCreated();
-            dbContextService.Database.Migrate();
+            await dbContextService.Database.EnsureCreatedAsync();
+            await dbContextService.Database.MigrateAsync();
             
             // Custom static class and method that creates table rows if there is not any row data into db
             // DBInitializerSeedData.InitializeDatabase(dbContextService);
