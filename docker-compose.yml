@@ -6,7 +6,7 @@ networks:
 services:
   postgresql:
     image: postgres:latest
-    container_name: postgresql-container
+    container_name: postgresql
     platform: linux/amd64  # Specify platform
     environment:
       - ACCEPT_EULA=Y   # Accept the End-User License Agreement
@@ -33,7 +33,7 @@ services:
       - light-eyes-net
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=localhost;Port=5432;Database=webApi;Username=sa;Password=LightEyesP@ssw0rd;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=postgresql;Database=webApi;Username=sa;Password=LightEyesP@ssw0rd;TrustServerCertificate=True
 
 volumes:
   postgresql-container-data:
