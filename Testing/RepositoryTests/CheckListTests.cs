@@ -3,7 +3,6 @@ using light_eyes.DTOs.CheckList;
 using light_eyes.Interfaces;
 using light_eyes.Models;
 using light_eyes.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Testing.RepositoryTests;
@@ -73,7 +72,7 @@ public class CheckListTests : IDisposable
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal("CheckList1", result?.Name);
+        Assert.Equal("CheckList1", result.Name);
         // Assert.IsType<string>(result.Description);
     }
 
@@ -97,7 +96,7 @@ public class CheckListTests : IDisposable
         await _context.CheckList.AddAsync(checkList);
         await _context.SaveChangesAsync();
 
-        var updateChecListDto = new UpdateCheckListDto
+        var updateCheckListDto = new UpdateCheckListDto
         {
             Name = "UpdatedName",
             Title = "UpdatedTitle",
@@ -106,10 +105,10 @@ public class CheckListTests : IDisposable
             Language = "en"
         };
 
-        var result = await _checkListRepository.UpdateAsync(1, updateChecListDto);
+        var result = await _checkListRepository.UpdateAsync(1, updateCheckListDto);
         var updateCheckList = await _checkListRepository.GetByIdAsync(1);
 
-        Assert.NotNull(updateCheckList);
+        Assert.NotNull(result);
         Assert.Equal("UpdatedName", updateCheckList?.Name);
     }
 
@@ -121,14 +120,14 @@ public class CheckListTests : IDisposable
         await _context.SaveChangesAsync();
 
         var result = await _checkListRepository.DeleteAsync(1);
-        var allChecKLists = await _checkListRepository.GetAllAsync();
+        var allCheckLists = await _checkListRepository.GetAllAsync();
 
         Assert.NotNull(result);
-        Assert.Empty(allChecKLists);
+        Assert.Empty(allCheckLists);
     }
 
     [Fact]
-    public async Task ExisdtAsync_ShouldReturnTrueOrFalseIfexists()
+    public async Task ExistAsync_ShouldReturnTrueOrFalseIfExists()
     {
         var checkList = new CheckList { CheckListId = 1, Name = "CheckList1", Title = "Title1", Description = "Description1", Language = "en" };
         await _context.CheckList.AddAsync(checkList);
@@ -136,6 +135,7 @@ public class CheckListTests : IDisposable
     
         var exists = await _checkListRepository.ExistsAsync(1);
         Assert.True(exists);
+        
         var nonExistent = await _checkListRepository.ExistsAsync(2);
         Assert.False(nonExistent);
     }
