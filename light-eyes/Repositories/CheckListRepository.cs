@@ -21,6 +21,7 @@ public class CheckListRepository : ICheckListRepository
     {
         return await _context.CheckList
             .Include(x => x.CheckListItems)
+            .ThenInclude(i => i.CheckListItemOptions)
             .ToListAsync();
     }
 
@@ -28,6 +29,7 @@ public class CheckListRepository : ICheckListRepository
     {
         return await _context.CheckList
             .Include(x => x.CheckListItems)
+            .ThenInclude(i => i.CheckListItemOptions)
             .FirstOrDefaultAsync(c => c.CheckListId == id);
     }
 
@@ -36,6 +38,43 @@ public class CheckListRepository : ICheckListRepository
         await _context.CheckList.AddAsync(checkListModel);
         await _context.SaveChangesAsync();
         return checkListModel;
+    }
+
+    public async Task<CheckList> CreateByTransactionAsync(CheckListDto checkListDto)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var checklist = new CheckList
+            {
+                Name = checkListDto.Name,
+                Description = checkListDto.Description,
+                Language = checkListDto.Language,
+                CheckListItems = checkListDto.CheckListItems.Select(item => new CheckListItem
+                {
+                    Content = item.Content,
+                    CheckListItemOptions = item.CheckListItemOptions.Select(option => new CheckListItemOption
+                    {
+                        Content = option.Content,
+                        IsPositive = option.IsPositive,
+                        IsSelected = option.IsSelected
+                    }).ToList()
+                }).ToList()
+            };
+
+            await _context.CheckList.AddAsync(checklist);
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+            return checklist;
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+        
     }
 
     public async Task<CheckList?> UpdateAsync(int id, CheckList updateCheckList)

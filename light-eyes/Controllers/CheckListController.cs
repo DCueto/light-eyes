@@ -2,6 +2,7 @@ using light_eyes.DTOs.Checklist;
 using light_eyes.DTOs.CheckList;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
+using light_eyes.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace light_eyes.Controllers
@@ -44,6 +45,23 @@ namespace light_eyes.Controllers
             var checkList = await _checkListRepository.CreateAsync(checkListModel);
             var checklistDto = checkList.ToCheckListDto();
             return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CheckList>> CreateByTransaction([FromBody] CheckListDto checkListDto)
+        {
+            try
+            {
+                var transactionChecklist = await _checkListRepository.CreateByTransactionAsync(checkListDto);
+                return CreatedAtAction(nameof(GetById), new { id = transactionChecklist.CheckListId },
+                    transactionChecklist);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+            
+                
         }
 
         [HttpPut]
