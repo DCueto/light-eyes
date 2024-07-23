@@ -41,7 +41,7 @@ namespace light_eyes.Controllers
         public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
         {
             var checkListModel = checkDto.ToCheckListFromCreateDto();
-            var checkList = await _checkListRepository.CreatAsync(checkListModel);
+            var checkList = await _checkListRepository.CreateAsync(checkListModel);
             var checklistDto = checkList.ToCheckListDto();
             return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
         }

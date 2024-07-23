@@ -28,24 +28,22 @@ public class CheckListItemOptionRepository : ICheckListItemOptionRepository
 
     public async Task<CheckListItemOption> CreateAsync(CheckListItemOption checkOptionModel)
     {
-        _context.CheckListItemOption.Add(checkOptionModel);
+        await _context.CheckListItemOption.AddAsync(checkOptionModel);
         await _context.SaveChangesAsync();
         return checkOptionModel;
     }
 
-    public async Task<CheckListItemOption?> UpdateAsync(int id, UpdateCheckListItemOptionDto updateCheckOptionDto)
+    public async Task<CheckListItemOption?> UpdateAsync(int id, CheckListItemOption updateCheckOption)
     {
         var existingCheckListOption = await _context.CheckListItemOption.FirstOrDefaultAsync(x => x.CheckListItemOptionId == id);
         if (existingCheckListOption == null)
         {
             return null;
         }
-
-        existingCheckListOption.Name = updateCheckOptionDto.Name;
-        existingCheckListOption.Content = updateCheckOptionDto.Content;
-        existingCheckListOption.IsPositive = updateCheckOptionDto.IsPositive;
-        existingCheckListOption.Language = updateCheckOptionDto.Language;
-
+        
+        existingCheckListOption.Content = updateCheckOption.Content;
+        existingCheckListOption.IsPositive = updateCheckOption.IsPositive;
+        existingCheckListOption.IsSelected = updateCheckOption.IsSelected;
         await _context.SaveChangesAsync();
 
         return existingCheckListOption;

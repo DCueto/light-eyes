@@ -27,7 +27,7 @@ public class CheckListItemRepository : ICheckListItemRepository
 
     public async Task<CheckListItem> CreateAsync(CheckListItem checkModel)
     {
-        _context.CheckListItem.Add(checkModel);
+        await _context.CheckListItem.AddAsync(checkModel);
         await _context.SaveChangesAsync();
         return checkModel;
     }

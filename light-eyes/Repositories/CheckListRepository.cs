@@ -27,9 +27,9 @@ public class CheckListRepository : ICheckListRepository
         return await _context.CheckList.FindAsync(id);
     }
 
-    public async Task<CheckList> CreatAsync(CheckList checkListModel)
+    public async Task<CheckList> CreateAsync(CheckList checkListModel)
     {
-        _context.CheckList.Add(checkListModel);
+        await _context.CheckList.AddAsync(checkListModel);
         await _context.SaveChangesAsync();
         return checkListModel;
     }
