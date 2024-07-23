@@ -14,7 +14,10 @@ public static class CheckListMappers
             Name = checkListModel.Name,
             Description = checkListModel.Description,
             CreatedDate = checkListModel.CreatedDate,
-            Language = checkListModel.Language
+            Language = checkListModel.Language,
+            CheckListItems = checkListModel.CheckListItems
+                .Select(c => c.ToCheckListItemDto())
+                .ToList()
         };
     }
 
@@ -24,17 +27,34 @@ public static class CheckListMappers
         {
             Name = checkListDto.Name,
             Description = checkListDto.Description,
-            Language = checkListDto.Language
+            CreatedDate = checkListDto.CreatedDate,
+            Language = checkListDto.Language,
+            CheckListItems = checkListDto.CheckListItems
+                .Select(c => c.ToCheckListItem())
+                .ToList()
         };
     }
     
     public static CheckList ToCheckListFromUpdateDto(this UpdateCheckListDto updateListDto)
     {
+        if (updateListDto.CheckListItems == null)
+        {
+            return new CheckList
+            {
+                Name = updateListDto.Name,
+                Description = updateListDto.Description,
+                Language = updateListDto.Language,
+            };
+        }
+        
         return new CheckList
         {
             Name = updateListDto.Name,
             Description = updateListDto.Description,
-            Language = updateListDto.Language
+            Language = updateListDto.Language,
+            CheckListItems = updateListDto.CheckListItems
+                .Select(c => c.ToCheckListItem())
+                .ToList()
         };
     }
     

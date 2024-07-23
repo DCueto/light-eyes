@@ -1,4 +1,5 @@
-﻿using light_eyes.DTOs.CheckListItemOption;
+﻿using light_eyes.DTOs.CheckListItemDto;
+using light_eyes.DTOs.CheckListItemOption;
 using light_eyes.Models;
 
 namespace light_eyes.Mappers;
@@ -14,6 +15,18 @@ public static class CheckListItemOptionMappers
             IsPositive = checkOptionModel.IsPositive,
             IsSelected = checkOptionModel.IsSelected,
             CheckListItemId = checkOptionModel.CheckListItemId
+        };
+    }
+
+    public static CheckListItemOption ToCheckListItemOption(this CheckListItemOptionDto checkListItemOptionDto)
+    {
+        return new CheckListItemOption
+        {
+            CheckListItemOptionId = checkListItemOptionDto.CheckListItemOptionId,
+            Content = checkListItemOptionDto.Content,
+            IsPositive = checkListItemOptionDto.IsPositive,
+            IsSelected = checkListItemOptionDto.IsSelected,
+            CheckListItemId = checkListItemOptionDto.CheckListItemId
         };
     }
 

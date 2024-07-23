@@ -19,12 +19,16 @@ public class CheckListRepository : ICheckListRepository
 
     public async Task<List<CheckList>> GetAllAsync()
     {
-        return await _context.CheckList.ToListAsync();
+        return await _context.CheckList
+            .Include(x => x.CheckListItems)
+            .ToListAsync();
     }
 
     public async Task<CheckList?> GetByIdAsync(int id)
     {
-        return await _context.CheckList.FindAsync(id);
+        return await _context.CheckList
+            .Include(x => x.CheckListItems)
+            .FirstOrDefaultAsync(c => c.CheckListId == id);
     }
 
     public async Task<CheckList> CreateAsync(CheckList checkListModel)
@@ -45,9 +49,9 @@ public class CheckListRepository : ICheckListRepository
         existingCheckList.Name = updateCheckList.Name;
         existingCheckList.Description = updateCheckList.Description;
         existingCheckList.Language = updateCheckList.Language;
+        // existingCheckList.CheckListItems = updateCheckList.CheckListItems;
 
         await _context.SaveChangesAsync();
-
         return existingCheckList;
     }
 
