@@ -1,4 +1,5 @@
-﻿using light_eyes.DTOs.CheckList;
+﻿using light_eyes.DTOs.Checklist;
+using light_eyes.DTOs.CheckList;
 using light_eyes.Models;
 
 namespace light_eyes.Mappers;
@@ -11,19 +12,17 @@ public static class CheckListMappers
         {
             CheckListId = checkListModel.CheckListId,
             Name = checkListModel.Name,
-            Title = checkListModel.Title,
             Description = checkListModel.Description,
             CreatedDate = checkListModel.CreatedDate,
             Language = checkListModel.Language
         };
     }
 
-    public static CheckList ToCheckListFromCreateDto(this CreateCheckListDto checkListDto)
+    public static CheckList ToCheckListFromCreateDto(this CreateChecklistRequestDto checkListDto)
     {
         return new CheckList
         {
             Name = checkListDto.Name,
-            Title = checkListDto.Title,
             Description = checkListDto.Description,
             Language = checkListDto.Language
         };
@@ -34,9 +33,7 @@ public static class CheckListMappers
         return new CheckList
         {
             Name = updateListDto.Name,
-            Title = updateListDto.Title,
             Description = updateListDto.Description,
-            CreatedDate = updateListDto.CreatedDate,
             Language = updateListDto.Language
         };
     }

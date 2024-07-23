@@ -10,7 +10,7 @@ public class CheckListItemOption
     public string Name { get; set; }
     public string Content { get; set; }
     public bool IsPositive { get; set; }
-    public string Language { get; set; }
+    public string Language { get; set; }// BORRAR  
     
     [ForeignKey("CheckListItem")]
     public int CheckListItemId { get; set; }
