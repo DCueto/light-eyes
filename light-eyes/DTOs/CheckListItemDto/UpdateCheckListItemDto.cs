@@ -4,5 +4,4 @@ public class UpdateCheckListItemDto
 {
     public string Name { get; set; }
     public string Content { get; set; }
-    public string Language { get; set; }
 }

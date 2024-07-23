@@ -7,8 +7,8 @@ public interface ICheckListRepository
 {
     Task<List<CheckList>> GetAllAsync();
     Task<CheckList?> GetByIdAsync(int id);
-    Task<CheckList> CreatAsync(CheckList checkListModel);
-    Task<CheckList?> UpdateAsync(int id, UpdateCheckListDto updateCheckListDto);
+    Task<CheckList> CreateAsync(CheckList checkListModel);
+    Task<CheckList?> UpdateAsync(int id, CheckList updateCheckList);
     Task<CheckList?> DeleteAsync(int id);
     Task<bool> ExistsAsync(int checklistId);
 }
