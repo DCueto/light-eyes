@@ -1,7 +1,7 @@
+using light_eyes.DTOs.Checklist;
 using light_eyes.DTOs.CheckList;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace light_eyes.Controllers
@@ -16,9 +16,9 @@ namespace light_eyes.Controllers
         {
             _checkListRepository = checkListRepository;
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<List<CheckListDto>>> GetAll()
         {
             var checkList = await _checkListRepository.GetAllAsync();
             var checkDto = checkList.Select(x => x.ToCheckListDto());
@@ -26,7 +26,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<ActionResult<CheckListDto>> GetById([FromRoute] int id)
         {
             var check = await _checkListRepository.GetByIdAsync(id);
             if (check == null)
@@ -38,30 +38,33 @@ namespace light_eyes.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCheckListDto checkDto)
+        public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
         {
-            var checkModel = checkDto.ToCheckListFromCreateDto();
-            await _checkListRepository.CreatAsync(checkModel);
-            return CreatedAtAction(nameof(GetById), new { id = checkModel.CheckListId }, checkModel.ToCheckListDto());
-
+            var checkListModel = checkDto.ToCheckListFromCreateDto();
+            var checkList = await _checkListRepository.CreateAsync(checkListModel);
+            var checklistDto = checkList.ToCheckListDto();
+            return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCheckListDto updateDto)
+        public async Task<ActionResult<CheckListDto>> Update([FromRoute] int id,
+            [FromBody] UpdateCheckListDto updateDto)
         {
-            var checkModel =await _checkListRepository.UpdateAsync(id , updateDto);
-            if (checkModel == null)
+            var checkListModel = updateDto.ToCheckListFromUpdateDto();
+            var checkListUpdated = await _checkListRepository.UpdateAsync(id, checkListModel);
+
+            if (checkListUpdated == null)
             {
                 return NotFound();
             }
 
-            return Ok(checkModel.ToCheckListDto());
+            return Ok(checkListUpdated.ToCheckListDto());
         }
 
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult<CheckListDto>> Delete([FromRoute] int id)
         {
             var checkModel = await _checkListRepository.DeleteAsync(id);
             if (checkModel == null)
@@ -69,8 +72,7 @@ namespace light_eyes.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(checkModel.ToCheckListDto());
         }
-        
     }
 }

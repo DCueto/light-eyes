@@ -12,7 +12,6 @@ public static class CheckListItemItemMappers
             CheckListItemId = checkListModel.CheckListItemId,
             Name = checkListModel.Name,
             Content = checkListModel.Content,
-            Language = checkListModel.Language,
             CheckListId = checkListModel.CheckListId
         };
     }
@@ -23,7 +22,6 @@ public static class CheckListItemItemMappers
         {
             Name = checkListDto.Name,
             Content = checkListDto.Content,
-            Language = checkListDto.Language,
             CheckListId = checklistId
         };
     }
@@ -34,7 +32,6 @@ public static class CheckListItemItemMappers
         {
             Name = updateListDto.Name,
             Content = updateListDto.Content,
-            Language = updateListDto.Language,
         };
     }
 }

@@ -12,14 +12,15 @@ namespace light_eyes.Controllers
         private readonly ICheckListItemOptionRepository _repository;
         private readonly ICheckListItemRepository _checkListItemRepository;
 
-        public CheckListItemOptionController(ICheckListItemOptionRepository checkOptionRepository, ICheckListItemRepository checkListItemRepository)
+        public CheckListItemOptionController(ICheckListItemOptionRepository checkOptionRepository,
+            ICheckListItemRepository checkListItemRepository)
         {
             _repository = checkOptionRepository;
             _checkListItemRepository = checkListItemRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllList()
+        public async Task<ActionResult<List<CheckListItemOptionDto>>> GetAllList()
         {
             var checkListOption = await _repository.GetAllAsync();
             var checkOptionDto = checkListOption.Select(x => x.ToCheckListItemOptionDto());
@@ -27,7 +28,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<CheckListItemOptionDto>> GetById(int id)
         {
             var checkItemOption = await _repository.GetByIdAsync(id);
             if (checkItemOption == null)
@@ -37,25 +38,30 @@ namespace light_eyes.Controllers
 
             return Ok(checkItemOption.ToCheckListItemOptionDto());
         }
-        
+
         [HttpPost("{checkListItemId:int}")]
-        public async Task<IActionResult> Create([FromBody] CreateCheckListItemOptionDto checkOptionDto, [FromRoute] int checkListItemId)
+        public async Task<ActionResult<CheckListItemOptionDto>> Create(
+            [FromBody] CreateCheckListItemOptionDto checkOptionDto, [FromRoute] int checkListItemId)
         {
             var checkListItemExists = await _checkListItemRepository.ExistsAsync(checkListItemId);
             if (checkListItemExists == false)
             {
                 return NotFound();
             }
+
             var checkOptionModel = checkOptionDto.ToCheckListItemOptionFromCreateDto(checkListItemId);
             await _repository.CreateAsync(checkOptionModel);
-            return CreatedAtAction(nameof(GetById), new { id = checkOptionModel.CheckListItemOptionId }, checkOptionModel.ToCheckListItemOptionDto());
+            return CreatedAtAction(nameof(GetById), new { id = checkOptionModel.CheckListItemOptionId },
+                checkOptionModel.ToCheckListItemOptionDto());
         }
-        
+
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody]  UpdateCheckListItemOptionDto updateCheckOptionDto)
+        public async Task<ActionResult<CheckListItemOptionDto>> Update([FromRoute] int id,
+            [FromBody] UpdateCheckListItemOptionDto updateCheckOptionDto)
         {
-            var checkItemModel = await _repository.UpdateAsync(id, updateCheckOptionDto);
+            var checkListItemOptionModel = updateCheckOptionDto.ToCheckListFromUpdateDto();
+            var checkItemModel = await _repository.UpdateAsync(id, checkListItemOptionModel);
             if (checkItemModel == null)
             {
                 return NotFound();
@@ -63,10 +69,10 @@ namespace light_eyes.Controllers
 
             return Ok(checkItemModel.ToCheckListItemOptionDto());
         }
-        
+
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult<CheckListItemOptionDto>> Delete([FromRoute] int id)
         {
             var checkOptionModel = await _repository.DeleteAsync(id);
             if (checkOptionModel == null)
@@ -74,7 +80,7 @@ namespace light_eyes.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(checkOptionModel.ToCheckListItemOptionDto());
         }
     }
 }

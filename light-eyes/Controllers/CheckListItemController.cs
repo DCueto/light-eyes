@@ -19,7 +19,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllSections()
+        public async Task<ActionResult<List<CheckListItemDto>>> GetAllSections()
         {
             var checkList = await _repository.GetAllAsync();
             var checkDto = checkList.Select(x => x.ToCheckListItemDto());
@@ -27,7 +27,7 @@ namespace light_eyes.Controllers
         }
         
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id) 
+        public async Task<ActionResult<CheckListItemDto>> GetById(int id) 
         {
             var checkGetById = await _repository.GetByIdAsync(id);
             if (checkGetById == null)
@@ -39,7 +39,7 @@ namespace light_eyes.Controllers
         }
         
         [HttpPost("{checklistId:int}")]
-        public async Task<IActionResult> Create([FromBody] CreateCheckListItemDto checkDto, [FromRoute] int checklistId)
+        public async Task<ActionResult<CheckListItemDto>> Create([FromBody] CreateCheckListItemDto checkDto, [FromRoute] int checklistId)
         {
             var checklistExists = await _checkListRepository.ExistsAsync(checklistId);
             if (checklistExists == false)
@@ -54,10 +54,11 @@ namespace light_eyes.Controllers
         
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCheckListItemDto updateCheckListItemDto)
+        public async Task<ActionResult<CheckListItemDto>> Update([FromRoute] int id, [FromBody] UpdateCheckListItemDto updateCheckListItemDto)
         {
-            var checkListItemModel = await _repository.UpdateAsync(id, updateCheckListItemDto);
-            if (checkListItemModel == null)
+            var checkListItemModel = updateCheckListItemDto.ToCheckListItemFromUpdateDto();
+            var checkListItemUpdated = await _repository.UpdateAsync(id, checkListItemModel);
+            if (checkListItemUpdated == null)
             {
                 return NotFound();
             }
@@ -67,7 +68,7 @@ namespace light_eyes.Controllers
         
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult<CheckListItemDto>> Delete([FromRoute] int id)
         {
             var checkListItemModel = await _repository.DeleteAsync(id);
             if (checkListItemModel == null)
@@ -75,7 +76,7 @@ namespace light_eyes.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(checkListItemModel.ToCheckListItemDto());
         }
     }
 }
