@@ -1,12 +1,10 @@
-﻿using System.Data.Entity;
-using light_eyes.Controllers;
+﻿using light_eyes.Controllers;
 using light_eyes.DTO.Account;
 using light_eyes.Interfaces;
 using light_eyes.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MockQueryable.Moq;
 using Moq;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -25,7 +23,7 @@ public class AccountControllerTests
     {
         var userStoreMock = new Mock<IUserStore<AppUser>>();
         _userManagerMock = new Mock<UserManager<AppUser>>(
-            userStoreMock.Object, null, null, null, null, null, null, null, null);
+            userStoreMock.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
         _tokenserviceMock = new Mock<ITokenService>();
 
@@ -36,7 +34,7 @@ public class AccountControllerTests
             _userManagerMock.Object,
             contextAccessorMock.Object,
             userPrincipalFactoryMock.Object,
-            null, null, null, null);
+            null!, null!, null!, null!);
 
         _accountController = new AccountController(
             _userManagerMock.Object,
