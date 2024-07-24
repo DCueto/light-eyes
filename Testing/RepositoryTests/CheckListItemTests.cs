@@ -27,7 +27,6 @@ public class CheckListItemTests : IDisposable
             CheckListItemId = 1,
             Name = "InitialCheckListItem",
             Content = "InitialContent",
-            Language = "en"
         };
 
         SeedDatabase().Wait();
@@ -50,8 +49,8 @@ public class CheckListItemTests : IDisposable
     {
         var checkListItems = new List<CheckListItem>
         {
-            new CheckListItem { CheckListItemId = 2, Name = "CheckListItem2", Content = "Content2", Language = "en1"},
-            new CheckListItem { CheckListItemId = 3, Name = "CheckListItem3", Content = "Content3", Language = "en2" }
+            new CheckListItem { CheckListItemId = 2, Name = "CheckListItem2", Content = "Content2"},
+            new CheckListItem { CheckListItemId = 3, Name = "CheckListItem3", Content = "Content3"}
         };
         
         await _context.CheckListItem.AddRangeAsync(checkListItems);
@@ -79,7 +78,6 @@ public class CheckListItemTests : IDisposable
             CheckListItemId = 2,
             Name = "NewCheckListItem",
             Content = "NewContent",
-            Language = "pt"
         };
 
         var result = await _repository.CreateAsync(newCheckListItem);
@@ -92,7 +90,7 @@ public class CheckListItemTests : IDisposable
     [Fact]
     public async Task UpdateAsync_ShouldUpdateCheckListItem()
     {
-        var updateCheckListItemDto = new UpdateCheckListItemDto
+        var updateCheckListItemDto = new CheckListItem
         {
             Name = "UpdateName",
             Content = "UpdateContent"
