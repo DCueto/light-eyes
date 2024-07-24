@@ -59,7 +59,6 @@ public class CheckListRepository : ICheckListRepository
                     {
                         Content = option.Content,
                         IsPositive = option.IsPositive,
-                        IsSelected = option.IsSelected
                     }).ToList()
                 }).ToList()
             };
@@ -75,7 +74,6 @@ public class CheckListRepository : ICheckListRepository
             await transaction.RollbackAsync();
             throw;
         }
-        
     }
 
     public async Task<CheckList?> UpdateAsync(int id, CheckList updateCheckList)

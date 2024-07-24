@@ -38,14 +38,14 @@ namespace light_eyes.Controllers
             return Ok(check.ToCheckListDto());
         }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
-        {
-            var checkListModel = checkDto.ToCheckListFromCreateDto();
-            var checkList = await _checkListRepository.CreateAsync(checkListModel);
-            var checklistDto = checkList.ToCheckListDto();
-            return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
-        }
+        // [HttpPost("create")]
+        // public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
+        // {
+        //     var checkListModel = checkDto.ToCheckListFromCreateDto();
+        //     var checkList = await _checkListRepository.CreateAsync(checkListModel);
+        //     var checklistDto = checkList.ToCheckListDto();
+        //     return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
+        // }
 
         [HttpPost("createByTransaction")]
         public async Task<ActionResult<CheckList>> CreateByTransaction([FromBody] CreateChecklistRequestDto checkListDto)

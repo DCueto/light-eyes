@@ -13,7 +13,6 @@ public static class CheckListItemOptionMappers
             CheckListItemOptionId = checkOptionModel.CheckListItemOptionId,
             Content = checkOptionModel.Content,
             IsPositive = checkOptionModel.IsPositive,
-            IsSelected = checkOptionModel.IsSelected,
             CheckListItemId = checkOptionModel.CheckListItemId
         };
     }
@@ -25,7 +24,6 @@ public static class CheckListItemOptionMappers
             CheckListItemOptionId = checkListItemOptionDto.CheckListItemOptionId,
             Content = checkListItemOptionDto.Content,
             IsPositive = checkListItemOptionDto.IsPositive,
-            IsSelected = checkListItemOptionDto.IsSelected,
             CheckListItemId = checkListItemOptionDto.CheckListItemId
         };
     }
@@ -38,7 +36,6 @@ public static class CheckListItemOptionMappers
             {
                 Content = checkOptionDto.Content,
                 IsPositive = checkOptionDto.IsPositive,
-                IsSelected = checkOptionDto.IsSelected,
                 CheckListItemId = checkListItemId.GetValueOrDefault()
             };
         }
@@ -47,7 +44,6 @@ public static class CheckListItemOptionMappers
         {
             Content = checkOptionDto.Content,
             IsPositive = checkOptionDto.IsPositive,
-            IsSelected = checkOptionDto.IsSelected
         };
         
     }
@@ -58,7 +54,6 @@ public static class CheckListItemOptionMappers
         {
             Content = updateOptionDto.Content,
             IsPositive = updateOptionDto.IsPositive,
-            IsSelected = updateOptionDto.IsSelected
         };
     }
 }
