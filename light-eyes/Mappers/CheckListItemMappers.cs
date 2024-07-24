@@ -56,14 +56,6 @@ public static class CheckListItemItemMappers
     
     public static CheckListItem ToCheckListItemFromUpdateDto(this UpdateCheckListItemDto updateListDto)
     {
-        if (updateListDto.CheckListItemOptions == null)
-        {
-            return new CheckListItem
-            {
-                Content = updateListDto.Content,
-            };
-        }
-
         return new CheckListItem
         {
             Content = updateListDto.Content,
