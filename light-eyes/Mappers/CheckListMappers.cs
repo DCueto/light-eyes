@@ -13,7 +13,7 @@ public static class CheckListMappers
             CheckListId = checkListModel.CheckListId,
             Name = checkListModel.Name,
             Description = checkListModel.Description,
-            CreatedDate = checkListModel.CreatedDate,
+            CreatedDate = DateTime.SpecifyKind(checkListModel.CreatedDate, DateTimeKind.Utc),
             Language = checkListModel.Language,
             CheckListItems = checkListModel.CheckListItems
                 .Select(c => c.ToCheckListItemDto())
@@ -27,10 +27,10 @@ public static class CheckListMappers
         {
             Name = checkListDto.Name,
             Description = checkListDto.Description,
-            CreatedDate = checkListDto.CreatedDate,
+            CreatedDate = DateTime.SpecifyKind(checkListDto.CreatedDate, DateTimeKind.Utc),
             Language = checkListDto.Language,
             CheckListItems = checkListDto.CheckListItems
-                .Select(c => c.ToCheckListItem())
+                .Select(c => c.ToCheckListItemFromCreateDto(null))
                 .ToList()
         };
     }

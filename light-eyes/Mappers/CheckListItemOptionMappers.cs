@@ -30,15 +30,26 @@ public static class CheckListItemOptionMappers
         };
     }
 
-    public static CheckListItemOption ToCheckListItemOptionFromCreateDto(this CreateCheckListItemOptionDto checkOptionDto, int checkListItemId)
+    public static CheckListItemOption ToCheckListItemOptionFromCreateDto(this CreateCheckListItemOptionDto checkOptionDto, int? checkListItemId)
     {
+        if (checkListItemId != null)
+        {
+            return new CheckListItemOption
+            {
+                Content = checkOptionDto.Content,
+                IsPositive = checkOptionDto.IsPositive,
+                IsSelected = checkOptionDto.IsSelected,
+                CheckListItemId = checkListItemId.GetValueOrDefault()
+            };
+        }
+        
         return new CheckListItemOption
         {
             Content = checkOptionDto.Content,
             IsPositive = checkOptionDto.IsPositive,
-            IsSelected = checkOptionDto.IsSelected,
-            CheckListItemId = checkListItemId
+            IsSelected = checkOptionDto.IsSelected
         };
+        
     }
 
     public static CheckListItemOption ToCheckListFromUpdateDto(this UpdateCheckListItemOptionDto updateOptionDto)

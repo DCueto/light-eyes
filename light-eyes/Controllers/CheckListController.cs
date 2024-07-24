@@ -38,7 +38,7 @@ namespace light_eyes.Controllers
             return Ok(check.ToCheckListDto());
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
         {
             var checkListModel = checkDto.ToCheckListFromCreateDto();
@@ -47,12 +47,13 @@ namespace light_eyes.Controllers
             return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<CheckList>> CreateByTransaction([FromBody] CheckListDto checkListDto)
+        [HttpPost("createByTransaction")]
+        public async Task<ActionResult<CheckList>> CreateByTransaction([FromBody] CreateChecklistRequestDto checkListDto)
         {
             try
             {
-                var transactionChecklist = await _checkListRepository.CreateByTransactionAsync(checkListDto);
+                var checklist = checkListDto.ToCheckListFromCreateDto();
+                var transactionChecklist = await _checkListRepository.CreateByTransactionAsync(checklist);
                 return CreatedAtAction(nameof(GetById), new { id = transactionChecklist.CheckListId },
                     transactionChecklist);
             }

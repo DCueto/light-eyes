@@ -40,7 +40,7 @@ public class CheckListRepository : ICheckListRepository
         return checkListModel;
     }
 
-    public async Task<CheckList> CreateByTransactionAsync(CheckListDto checkListDto)
+    public async Task<CheckList> CreateByTransactionAsync(CheckList checkList)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -48,10 +48,11 @@ public class CheckListRepository : ICheckListRepository
         {
             var checklist = new CheckList
             {
-                Name = checkListDto.Name,
-                Description = checkListDto.Description,
-                Language = checkListDto.Language,
-                CheckListItems = checkListDto.CheckListItems.Select(item => new CheckListItem
+                Name = checkList.Name,
+                Description = checkList.Description,
+                Language = checkList.Language,
+                CreatedDate = checkList.CreatedDate.ToUniversalTime(),
+                CheckListItems = checkList.CheckListItems.Select(item => new CheckListItem
                 {
                     Content = item.Content,
                     CheckListItemOptions = item.CheckListItemOptions.Select(option => new CheckListItemOption

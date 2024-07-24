@@ -23,8 +23,7 @@ builder.Services.AddCors(options =>
     {
         policyBuilder.AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
+            .AllowAnyHeader();
     });
 });
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>

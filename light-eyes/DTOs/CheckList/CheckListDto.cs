@@ -10,7 +10,7 @@ public class CheckListDto
     public string? Language { get; set; } = String.Empty;
     public DateTime CreatedDate { get; set; }
     
-    public int? AppUserId { get; set; }
+    // public int? AppUserId { get; set; }
 
     public List<CheckListItemDto.CheckListItemDto> CheckListItems { get; set; } = new List<CheckListItemDto.CheckListItemDto>();
 }

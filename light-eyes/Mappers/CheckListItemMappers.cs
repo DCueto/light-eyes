@@ -10,7 +10,6 @@ public static class CheckListItemItemMappers
         return new CheckListItemDto
         {
             CheckListItemId = checkListModel.CheckListItemId,
-            Name = checkListModel.Name,
             Content = checkListModel.Content,
             CheckListId = checkListModel.CheckListId,
             CheckListItemOptions = checkListModel.CheckListItemOptions
@@ -24,7 +23,6 @@ public static class CheckListItemItemMappers
         return new CheckListItem
         {
             CheckListItemId = checkListItemDto.CheckListItemId,
-            Name = checkListItemDto.Name,
             Content = checkListItemDto.Content,
             CheckListId = checkListItemDto.CheckListId,
             CheckListItemOptions = checkListItemDto.CheckListItemOptions
@@ -33,15 +31,25 @@ public static class CheckListItemItemMappers
         };
     }
 
-    public static CheckListItem ToCheckListItemFromCreateDto(this CreateCheckListItemDto checkListItemDto, int checklistId)
+    public static CheckListItem ToCheckListItemFromCreateDto(this CreateCheckListItemDto checkListItemDto, int? checklistId)
     {
+        if (checklistId != null)
+        {
+            return new CheckListItem
+            {
+                Content = checkListItemDto.Content,
+                CheckListId = checklistId.GetValueOrDefault(),
+                CheckListItemOptions = checkListItemDto.CheckListItemOptions
+                    .Select(c => c.ToCheckListItemOptionFromCreateDto(null))
+                    .ToList()
+            };
+        }
+        
         return new CheckListItem
         {
-            Name = checkListItemDto.Name,
             Content = checkListItemDto.Content,
-            CheckListId = checklistId,
             CheckListItemOptions = checkListItemDto.CheckListItemOptions
-                .Select(c => c.ToCheckListItemOption())
+                .Select(c => c.ToCheckListItemOptionFromCreateDto(null))
                 .ToList()
         };
     }
@@ -52,14 +60,12 @@ public static class CheckListItemItemMappers
         {
             return new CheckListItem
             {
-                Name = updateListDto.Name,
                 Content = updateListDto.Content,
             };
         }
 
         return new CheckListItem
         {
-            Name = updateListDto.Name,
             Content = updateListDto.Content,
             CheckListItemOptions = updateListDto.CheckListItemOptions
                 .Select(c => c.ToCheckListItemOption())
