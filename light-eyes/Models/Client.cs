@@ -12,6 +12,7 @@ public class Client
     public string Area { get; set; }
     public string ContactEmail { get; set; }
     public string ContactPhone { get; set; }
-
+    
+    // Don't include Client for this List of Reports on ClientDto
     public List<Report> Reports { get; set; } // Be careful with cycle between Report and Client
 }
