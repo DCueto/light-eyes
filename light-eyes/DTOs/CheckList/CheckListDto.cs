@@ -1,4 +1,4 @@
-﻿using light_eyes.Models;
+using light_eyes.Models;
 
 namespace light_eyes.DTOs.CheckList;
 
