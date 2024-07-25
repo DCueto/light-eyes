@@ -37,15 +37,7 @@ namespace light_eyes.Controllers
 
             return Ok(check.ToCheckListDto());
         }
-
-        // [HttpPost("create")]
-        // public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
-        // {
-        //     var checkListModel = checkDto.ToCheckListFromCreateDto();
-        //     var checkList = await _checkListRepository.CreateAsync(checkListModel);
-        //     var checklistDto = checkList.ToCheckListDto();
-        //     return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
-        // }
+        
 
         [HttpPost("createByTransaction")]
         public async Task<ActionResult<CheckList>> CreateByTransaction([FromBody] CreateChecklistRequestDto checkListDto)
@@ -61,12 +53,9 @@ namespace light_eyes.Controllers
             {
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
-            
-                
         }
 
-        [HttpPut("updateByTransaction")]
-        [Route("{checkListId:int}")]
+        [HttpPut("updateByTransaction/{checkListId:int}")]
         public async Task<ActionResult<CheckListDto>> UpdateByTransaction([FromRoute] int checkListId, [FromBody] UpdateCheckListDto updateCheckListDto)
         {
             try
@@ -89,22 +78,6 @@ namespace light_eyes.Controllers
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
         }
-
-        // [HttpPut]
-        // [Route("{id:int}")]
-        // public async Task<ActionResult<CheckListDto>> Update([FromRoute] int id,
-        //     [FromBody] UpdateCheckListDto updateDto)
-        // {
-        //     var checkListModel = updateDto.ToCheckListFromUpdateDto();
-        //     var checkListUpdated = await _checkListRepository.UpdateAsync(id, checkListModel);
-        //
-        //     if (checkListUpdated == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return Ok(checkListUpdated.ToCheckListDto());
-        // }
 
         [HttpDelete]
         [Route("{id:int}")]
