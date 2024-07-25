@@ -1,5 +1,6 @@
 ﻿using light_eyes.Data;
 using light_eyes.DTO.Report;
+using light_eyes.Interfaces;
 using light_eyes.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +42,6 @@ public class ReportRepository : IReportRepository
 
         existingReport.Name = updateReportDto.Name;
         existingReport.CreatedDate = updateReportDto.CreatedDate;
-        existingReport.EndDate = updateReportDto.EndDate;
         existingReport.Language = updateReportDto.Language;
 
         await _context.SaveChangesAsync();

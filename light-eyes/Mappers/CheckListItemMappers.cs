@@ -10,19 +10,47 @@ public static class CheckListItemItemMappers
         return new CheckListItemDto
         {
             CheckListItemId = checkListModel.CheckListItemId,
-            Name = checkListModel.Name,
             Content = checkListModel.Content,
-            CheckListId = checkListModel.CheckListId
+            CheckListId = checkListModel.CheckListId,
+            CheckListItemOptions = checkListModel.CheckListItemOptions
+                .Select(c => c.ToCheckListItemOptionDto())
+                .ToList()
         };
     }
 
-    public static CheckListItem ToCheckListItemFromCreateDto(this CreateCheckListItemDto checkListDto, int checklistId)
+    public static CheckListItem ToCheckListItem(this CheckListItemDto checkListItemDto)
     {
         return new CheckListItem
         {
-            Name = checkListDto.Name,
-            Content = checkListDto.Content,
-            CheckListId = checklistId
+            CheckListItemId = checkListItemDto.CheckListItemId,
+            Content = checkListItemDto.Content,
+            CheckListId = checkListItemDto.CheckListId,
+            CheckListItemOptions = checkListItemDto.CheckListItemOptions
+                .Select(c => c.ToCheckListItemOption())
+                .ToList()
+        };
+    }
+
+    public static CheckListItem ToCheckListItemFromCreateDto(this CreateCheckListItemDto checkListItemDto, int? checklistId)
+    {
+        if (checklistId != null)
+        {
+            return new CheckListItem
+            {
+                Content = checkListItemDto.Content,
+                CheckListId = checklistId.GetValueOrDefault(),
+                CheckListItemOptions = checkListItemDto.CheckListItemOptions
+                    .Select(c => c.ToCheckListItemOptionFromCreateDto(null))
+                    .ToList()
+            };
+        }
+        
+        return new CheckListItem
+        {
+            Content = checkListItemDto.Content,
+            CheckListItemOptions = checkListItemDto.CheckListItemOptions
+                .Select(c => c.ToCheckListItemOptionFromCreateDto(null))
+                .ToList()
         };
     }
     
@@ -30,8 +58,10 @@ public static class CheckListItemItemMappers
     {
         return new CheckListItem
         {
-            Name = updateListDto.Name,
             Content = updateListDto.Content,
+            CheckListItemOptions = updateListDto.CheckListItemOptions
+                .Select(c => c.ToCheckListItemOption())
+                .ToList()
         };
     }
 }

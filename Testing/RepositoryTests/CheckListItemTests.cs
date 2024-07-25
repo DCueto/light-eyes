@@ -25,7 +25,6 @@ public class CheckListItemTests : IDisposable
         _testsCheckListItem = new CheckListItem
         {
             CheckListItemId = 1,
-            Name = "InitialCheckListItem",
             Content = "InitialContent",
         };
 
@@ -49,8 +48,8 @@ public class CheckListItemTests : IDisposable
     {
         var checkListItems = new List<CheckListItem>
         {
-            new CheckListItem { CheckListItemId = 2, Name = "CheckListItem2", Content = "Content2"},
-            new CheckListItem { CheckListItemId = 3, Name = "CheckListItem3", Content = "Content3"}
+            new CheckListItem { CheckListItemId = 2, Content = "Content2"},
+            new CheckListItem { CheckListItemId = 3, Content = "Content3" }
         };
         
         await _context.CheckListItem.AddRangeAsync(checkListItems);
@@ -67,7 +66,6 @@ public class CheckListItemTests : IDisposable
         var result = await _repository.GetByIdAsync(1);
 
         Assert.NotNull(result);
-        Assert.Equal("InitialCheckListItem", result.Name);
     }
 
     [Fact]
@@ -76,7 +74,6 @@ public class CheckListItemTests : IDisposable
         var newCheckListItem = new CheckListItem
         {
             CheckListItemId = 2,
-            Name = "NewCheckListItem",
             Content = "NewContent",
         };
 
@@ -90,17 +87,14 @@ public class CheckListItemTests : IDisposable
     [Fact]
     public async Task UpdateAsync_ShouldUpdateCheckListItem()
     {
-        var updateCheckListItemDto = new CheckListItem
+        var updateCheckListItemDto = new UpdateCheckListItemDto
         {
-            Name = "UpdateName",
             Content = "UpdateContent"
         };
-
-        var result = await _repository.UpdateAsync(1, updateCheckListItemDto);
+        
         var updateCheckListItem = await _repository.GetByIdAsync(1);
-
-        Assert.NotNull(result);
-        Assert.Equal("UpdateName", updateCheckListItem?.Name);
+        
+        Assert.Equal("UpdateContent", updateCheckListItem?.Content);
     }
 
     [Fact]

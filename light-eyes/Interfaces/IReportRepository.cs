@@ -1,7 +1,7 @@
 ﻿using light_eyes.DTO.Report;
 using light_eyes.Models;
 
-namespace light_eyes.Repositories;
+namespace light_eyes.Interfaces;
 
 public interface IReportRepository
 {

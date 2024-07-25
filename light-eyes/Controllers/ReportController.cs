@@ -1,4 +1,5 @@
 using light_eyes.DTO.Report;
+using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
 using light_eyes.Repositories;
@@ -40,7 +41,7 @@ namespace light_eyes.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateReportRequestDto reportDto)
         {
-            var reportModel = reportDto.ToReportFromCreateDTO();
+            var reportModel = reportDto.ToReportFromCreateDto();
             await _repository.CreatAsync(reportModel);
             return CreatedAtAction(nameof(GetById), new { id = reportModel.ReportId }, reportModel.ToReportDto());
 

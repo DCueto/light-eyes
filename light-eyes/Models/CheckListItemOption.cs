@@ -10,8 +10,6 @@ public class CheckListItemOption
     public string Content { get; set; }
     public bool IsPositive { get; set; } = false;
     
-    public bool IsSelected { get; set; } = false;
-    
     [ForeignKey("CheckListItem")]
     public int CheckListItemId { get; set; }
     public CheckListItem CheckListItem { get; set; }
