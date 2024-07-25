@@ -65,21 +65,46 @@ namespace light_eyes.Controllers
                 
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<ActionResult<CheckListDto>> Update([FromRoute] int id,
-            [FromBody] UpdateCheckListDto updateDto)
+        [HttpPut("updateByTransaction")]
+        [Route("{checkListId:int}")]
+        public async Task<ActionResult<CheckListDto>> UpdateByTransaction([FromRoute] int checkListId, [FromBody] UpdateCheckListDto updateCheckListDto)
         {
-            var checkListModel = updateDto.ToCheckListFromUpdateDto();
-            var checkListUpdated = await _checkListRepository.UpdateAsync(id, checkListModel);
-
-            if (checkListUpdated == null)
+            try
             {
-                return NotFound();
-            }
+                var existingCheckList = await _checkListRepository.GetByIdAsync(checkListId);
 
-            return Ok(checkListUpdated.ToCheckListDto());
+                if (existingCheckList == null)
+                {
+                    return NotFound();
+                }
+                
+                // Update the existing checklist with incoming changes from UpdateCheckListDto
+                var updatedCheckList = existingCheckList.UpdateChecklistFromDto(updateCheckListDto);
+                var checkListUpdatedByTransaction = _checkListRepository.UpdateByTransactionAsync(updatedCheckList, updateCheckListDto);
+                
+                return Ok(checkListUpdatedByTransaction);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
+
+        // [HttpPut]
+        // [Route("{id:int}")]
+        // public async Task<ActionResult<CheckListDto>> Update([FromRoute] int id,
+        //     [FromBody] UpdateCheckListDto updateDto)
+        // {
+        //     var checkListModel = updateDto.ToCheckListFromUpdateDto();
+        //     var checkListUpdated = await _checkListRepository.UpdateAsync(id, checkListModel);
+        //
+        //     if (checkListUpdated == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     return Ok(checkListUpdated.ToCheckListDto());
+        // }
 
         [HttpDelete]
         [Route("{id:int}")]

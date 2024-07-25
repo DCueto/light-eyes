@@ -4,6 +4,7 @@ using light_eyes.DTOs.CheckList;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace light_eyes.Repositories;
@@ -31,13 +32,6 @@ public class CheckListRepository : ICheckListRepository
             .Include(x => x.CheckListItems)
             .ThenInclude(i => i.CheckListItemOptions)
             .FirstOrDefaultAsync(c => c.CheckListId == id);
-    }
-
-    public async Task<CheckList> CreateAsync(CheckList checkListModel)
-    {
-        await _context.CheckList.AddAsync(checkListModel);
-        await _context.SaveChangesAsync();
-        return checkListModel;
     }
 
     public async Task<CheckList> CreateByTransactionAsync(CheckList checkList)
@@ -74,6 +68,62 @@ public class CheckListRepository : ICheckListRepository
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    // Takes the existing CheckList and modifies so fits with updateCheckListDto request changes
+    public async Task<CheckList?> UpdateByTransactionAsync(CheckList existingCheckList, UpdateCheckListDto updateCheckListDto)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // Remove items and options not in existing current checklist
+            // Remove items
+            var checkListItemIdsFromDto = updateCheckListDto.CheckListItems
+                .Select(i => i.CheckListItemId).ToList();
+            var existingItemsToRemove = existingCheckList.CheckListItems
+                .Where(i => !checkListItemIdsFromDto.Contains(i.CheckListItemId)).ToList();
+            _context.CheckListItem.RemoveRange(existingItemsToRemove);
+            
+            // Remove options
+            foreach (var item in updateCheckListDto.CheckListItems)
+            {
+                var existingItem = existingCheckList.CheckListItems.FirstOrDefault(i => i.CheckListItemId == item.CheckListItemId);
+                if (existingItem != null)
+                {
+                    var checkListOptionIdsFromDto = item.CheckListItemOptions
+                        .Select(o => o.CheckListItemOptionId)
+                        .ToList();
+                    
+                    var checkListOptionsToRemove = existingItem.CheckListItemOptions
+                        .Where(o => !checkListOptionIdsFromDto.Contains(o.CheckListItemOptionId))
+                        .ToList();
+                    
+                    _context.CheckListItemOption.RemoveRange(checkListOptionsToRemove);
+                }
+            }
+            
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return existingCheckList;
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+    
+    
+    
+    
+    
+    public async Task<CheckList> CreateAsync(CheckList checkListModel)
+    {
+        await _context.CheckList.AddAsync(checkListModel);
+        await _context.SaveChangesAsync();
+        return checkListModel;
     }
 
     public async Task<CheckList?> UpdateAsync(int id, CheckList updateCheckList)

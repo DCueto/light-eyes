@@ -54,7 +54,7 @@ public static class CheckListMappers
     // UPDATE CHECKLIST TRANSACTION
     // Update an existing data from data passed through dto
 
-    public static void UpdateChecklistFromDto(this CheckList checkList, UpdateCheckListDto updateCheckListDto)
+    public static CheckList UpdateChecklistFromDto(this CheckList checkList, UpdateCheckListDto updateCheckListDto)
     {
         checkList.Name = updateCheckListDto.Name;
         checkList.Description = updateCheckListDto.Description;
@@ -66,7 +66,8 @@ public static class CheckListMappers
         {
             var existingItem = checkList.CheckListItems
                 .FirstOrDefault(exItem => exItem.CheckListItemId == itemFromDto.CheckListItemId);
-
+            
+            // If item from dto doesn't exists then add it to the existing checkList
             if (existingItem == null)
             {
                 checkList.CheckListItems.Add(itemFromDto.ToCheckListItem());
@@ -76,6 +77,8 @@ public static class CheckListMappers
                 existingItem.UpdateChecklistItemFromDto(itemFromDto);
             }
         }
+
+        return checkList;
     }
 
     public static void UpdateChecklistItemFromDto(this CheckListItem checkListItem, CheckListItemDto itemDto)
