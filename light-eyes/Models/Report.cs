@@ -8,7 +8,7 @@ public class Report
     [Key]
     public int Id { get; set; }
     public string Name { get; set; }
-    public string? Description { get; set; } = String.Empty;
+    public string Description { get; set; } = String.Empty;
     public string Content { get; set; } = String.Empty;
     public string Type { get; set; } = String.Empty;
     public DateTime CreatedDate { get; set; } = DateTime.Now;
