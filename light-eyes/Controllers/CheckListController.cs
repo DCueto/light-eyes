@@ -69,9 +69,12 @@ namespace light_eyes.Controllers
                 
                 // Update the existing checklist with incoming changes from UpdateCheckListDto
                 var updatedCheckList = existingCheckList.UpdateChecklistFromDto(updateCheckListDto);
-                var checkListUpdatedByTransaction = _checkListRepository.UpdateByTransactionAsync(updatedCheckList, updateCheckListDto);
-                
-                return Ok(checkListUpdatedByTransaction);
+                var checkListUpdatedByTransaction = await _checkListRepository.UpdateByTransactionAsync(updatedCheckList, updateCheckListDto);
+
+                if (checkListUpdatedByTransaction == null)
+                    return StatusCode(500, "Has been an error through the transaction process");
+                        
+                return Ok(checkListUpdatedByTransaction.ToCheckListDto());
             }
             catch (Exception ex)
             {
