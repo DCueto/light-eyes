@@ -93,6 +93,7 @@ public class CheckListTests : IDisposable
     public async Task UpdateAsync_ShouldUpdateCheckList()
     {
         var checkList = new CheckList { CheckListId = 1, Name = "CheckList1", Description = "Description1", Language = "en" };
+
         await _context.CheckList.AddAsync(checkList);
         await _context.SaveChangesAsync();
 
@@ -105,7 +106,6 @@ public class CheckListTests : IDisposable
 
         // var result = await _checkListRepository.UpdateAsync(1, updateCheckListDto);
         var updateCheckList = await _checkListRepository.GetByIdAsync(1);
-        
         Assert.Equal("UpdatedName", updateCheckList?.Name);
     }
 

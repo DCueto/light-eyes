@@ -95,6 +95,11 @@ public class CheckListItemTests : IDisposable
         var updateCheckListItem = await _repository.GetByIdAsync(1);
         
         Assert.Equal("UpdateContent", updateCheckListItem?.Content);
+
+        var result = await _repository.UpdateAsync(1, updateCheckListItemDto);
+        var updateCheckListItem = await _repository.GetByIdAsync(1);
+
+        Assert.NotNull(result);
     }
 
     [Fact]

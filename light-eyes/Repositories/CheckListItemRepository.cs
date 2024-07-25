@@ -43,7 +43,7 @@ public class CheckListItemRepository : ICheckListItemRepository
         {
             return null;
         }
-        
+
         existingCheckListItem.Content = updateCheckListItem.Content;
 
         await _context.SaveChangesAsync();

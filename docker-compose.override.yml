@@ -9,7 +9,7 @@ services:
       - "80"
       - "8081"
     volumes:
-      - /Users/dcueto/docker-shared/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro # Mac path -> change user
-      - /Users/dcueto/docker-shared/ASP.NET/Https:/home/app/.aspnet/https:ro # Mac path -> change user
-#      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro # windows path
-#      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro # windows path
+#      - /Users/dcueto/docker-shared/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro # Mac path -> change user
+#      - /Users/dcueto/docker-shared/ASP.NET/Https:/home/app/.aspnet/https:ro # Mac path -> change user
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro # windows path
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro # windows path
