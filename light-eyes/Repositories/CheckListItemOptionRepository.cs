@@ -43,7 +43,7 @@ public class CheckListItemOptionRepository : ICheckListItemOptionRepository
         
         existingCheckListOption.Content = updateCheckOption.Content;
         existingCheckListOption.IsPositive = updateCheckOption.IsPositive;
-        existingCheckListOption.IsSelected = updateCheckOption.IsSelected;
+
         await _context.SaveChangesAsync();
 
         return existingCheckListOption;

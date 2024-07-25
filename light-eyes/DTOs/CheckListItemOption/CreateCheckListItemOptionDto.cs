@@ -4,6 +4,4 @@ public class CreateCheckListItemOptionDto
 {
     public string Content { get; set; } 
     public bool IsPositive { get; set; } = false;
-    
-    public bool IsSelected { get; set; } = false;
 }

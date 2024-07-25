@@ -23,8 +23,7 @@ builder.Services.AddCors(options =>
     {
         policyBuilder.AllowAnyOrigin()
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
+            .AllowAnyHeader();
     });
 });
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
@@ -62,7 +61,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
-builder.Services.AddScoped<ISectionRepository, SectionRepository>();
 builder.Services.AddScoped<ICheckListRepository, CheckListRepository>();
 builder.Services.AddScoped<ICheckListItemRepository, CheckListItemRepository>();
 builder.Services.AddScoped<ICheckListItemOptionRepository, CheckListItemOptionRepository>();
