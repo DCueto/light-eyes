@@ -9,7 +9,7 @@ public static class ReportMappers
     {
         return new ReportDto
         {
-            ReportId = reportModel.ReportId,
+            Id = reportModel.Id,
             Name = reportModel.Name,
             CreatedDate = reportModel.CreatedDate,
             Language = reportModel.Language

@@ -43,7 +43,7 @@ namespace light_eyes.Controllers
         {
             var reportModel = reportDto.ToReportFromCreateDto();
             await _repository.CreatAsync(reportModel);
-            return CreatedAtAction(nameof(GetById), new { id = reportModel.ReportId }, reportModel.ToReportDto());
+            return CreatedAtAction(nameof(GetById), new { id = reportModel.Id }, reportModel.ToReportDto());
 
         }
 

@@ -34,7 +34,7 @@ public class ReportRepository : IReportRepository
 
     public async Task<Report?> UpdateAsync(int id, UpdateReportRequestDto updateReportDto)
     {
-        var existingReport = await _context.Report.FirstOrDefaultAsync(X=> X.ReportId == id);
+        var existingReport = await _context.Report.FirstOrDefaultAsync(X=> X.Id == id);
         if (existingReport == null)
         {
             return null;
@@ -52,7 +52,7 @@ public class ReportRepository : IReportRepository
 
     public async Task<Report?> DeleteAsync(int id)
     {
-        var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.ReportId == id);
+        var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
         if (reportModel == null)
         {
             return null;
