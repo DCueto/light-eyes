@@ -48,7 +48,7 @@ public static class CheckListItemOptionMappers
         
     }
 
-    public static CheckListItemOption ToCheckListFromUpdateDto(this UpdateCheckListItemOptionDto updateOptionDto)
+    public static CheckListItemOption ToCheckListItemOptionFromUpdateDto(this UpdateCheckListItemOptionDto updateOptionDto)
     {
         return new CheckListItemOption
         {

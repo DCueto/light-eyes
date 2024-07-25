@@ -22,7 +22,7 @@ namespace light_eyes.Controllers
         public async Task<ActionResult<List<CheckListDto>>> GetAll()
         {
             var checkList = await _checkListRepository.GetAllAsync();
-            var checkDto = checkList.Select(x => x.ToCheckListDto());
+            var checkDto = checkList.Select(x => x.ToCheckListDto()).ToList();
             return Ok(checkDto);
         }
 
@@ -47,7 +47,7 @@ namespace light_eyes.Controllers
                 var checklist = checkListDto.ToCheckListFromCreateDto();
                 var transactionChecklist = await _checkListRepository.CreateByTransactionAsync(checklist);
                 return CreatedAtAction(nameof(GetById), new { id = transactionChecklist.CheckListId },
-                    transactionChecklist);
+                    transactionChecklist.ToCheckListDto());
             }
             catch (Exception e)
             {
