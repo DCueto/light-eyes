@@ -4,6 +4,4 @@ public class UpdateCheckListItemOptionDto
 {
     public string Content { get; set; }
     public bool IsPositive { get; set; }
-
-    public bool IsSelected { get; set; }
 }

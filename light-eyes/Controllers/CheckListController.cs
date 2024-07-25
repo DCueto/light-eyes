@@ -2,6 +2,7 @@ using light_eyes.DTOs.Checklist;
 using light_eyes.DTOs.CheckList;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
+using light_eyes.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace light_eyes.Controllers
@@ -36,30 +37,49 @@ namespace light_eyes.Controllers
 
             return Ok(check.ToCheckListDto());
         }
+        
 
-        [HttpPost]
-        public async Task<ActionResult<CheckListDto>> Create([FromBody] CreateChecklistRequestDto checkDto)
+        [HttpPost("createByTransaction")]
+        public async Task<ActionResult<CheckList>> CreateByTransaction([FromBody] CreateChecklistRequestDto checkListDto)
         {
-            var checkListModel = checkDto.ToCheckListFromCreateDto();
-            var checkList = await _checkListRepository.CreateAsync(checkListModel);
-            var checklistDto = checkList.ToCheckListDto();
-            return CreatedAtAction(nameof(GetById), new { id = checkList.CheckListId }, checklistDto);
+            try
+            {
+                var checklist = checkListDto.ToCheckListFromCreateDto();
+                var transactionChecklist = await _checkListRepository.CreateByTransactionAsync(checklist);
+                return CreatedAtAction(nameof(GetById), new { id = transactionChecklist.CheckListId },
+                    transactionChecklist);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<ActionResult<CheckListDto>> Update([FromRoute] int id,
-            [FromBody] UpdateCheckListDto updateDto)
+        [HttpPut("updateByTransaction/{checkListId:int}")]
+        public async Task<ActionResult<CheckListDto>> UpdateByTransaction([FromRoute] int checkListId, [FromBody] UpdateCheckListDto updateCheckListDto)
         {
-            var checkListModel = updateDto.ToCheckListFromUpdateDto();
-            var checkListUpdated = await _checkListRepository.UpdateAsync(id, checkListModel);
-
-            if (checkListUpdated == null)
+            try
             {
-                return NotFound();
-            }
+                var existingCheckList = await _checkListRepository.GetByIdAsync(checkListId);
 
-            return Ok(checkListUpdated.ToCheckListDto());
+                if (existingCheckList == null)
+                {
+                    return NotFound();
+                }
+                
+                // Update the existing checklist with incoming changes from UpdateCheckListDto
+                var updatedCheckList = existingCheckList.UpdateChecklistFromDto(updateCheckListDto);
+                var checkListUpdatedByTransaction = await _checkListRepository.UpdateByTransactionAsync(updatedCheckList, updateCheckListDto);
+
+                if (checkListUpdatedByTransaction == null)
+                    return StatusCode(500, "Has been an error through the transaction process");
+                        
+                return Ok(checkListUpdatedByTransaction.ToCheckListDto());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
 
         [HttpDelete]

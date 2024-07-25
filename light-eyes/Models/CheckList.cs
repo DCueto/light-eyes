@@ -11,7 +11,7 @@ public class CheckList
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 
 
-    public int? AppUserId { get; set; }
+    // public int? AppUserId { get; set; }
 
     public List<CheckListItem> CheckListItems { get; set; } = new List<CheckListItem>();
 }
