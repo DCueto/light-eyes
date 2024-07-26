@@ -8,6 +8,6 @@ public interface IReportRepository
     Task<List<Report>> GetAllAsync();
 
     Task<Report> CreateByTransactionAsync(Report report);
-    // Task<Report?> GetByIdAsync(int id);
+    Task<Report?> GetByIdAsync(int id);
     // Task<Report?> DeleteAsync(int id);
 }

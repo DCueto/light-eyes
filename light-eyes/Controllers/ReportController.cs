@@ -19,11 +19,23 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllReports()
+        public async Task<ActionResult<List<ReportDto>>> GetAllReports()
         {
             var reportList = await _reportRepository.GetAllAsync();
             var reportDto = reportList.Select(x => x.ToReportDto()).ToList();
             return Ok(reportDto);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ReportDto>> GetById([FromRoute] int id)
+        {
+            var report = await _reportRepository.GetByIdAsync(id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(report.ToReportDto());
         }
 
         [HttpPost("createByTransaction")]
@@ -33,27 +45,16 @@ namespace light_eyes.Controllers
             {
                 var report = createReportDto.ToReportFromCreateDto();
                 var transactionReport = await _reportRepository.CreateByTransactionAsync(report);
-                return Ok(transactionReport.ToReportDto()); // Change to CreatedAtAction actionResult method
+                return CreatedAtAction(nameof(GetById), new { id = transactionReport.Id }, 
+                    transactionReport.ToReportDto());
             }
             catch (Exception e)
             {
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
-
-        // [HttpGet("{id:int}")]
-        // public async Task<IActionResult> GetById([FromRoute] int id)
-        // {
-        //     var report = await _repository.GetByIdAsync(id);
-        //     if (report == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return Ok(report.ToReportDto());
-        // }
-        //
-        //
+        
+        
         // [HttpDelete]
         // [Route("{id:int}")]
         // public async Task<IActionResult> Delete([FromRoute] int id)

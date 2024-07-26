@@ -26,6 +26,20 @@ public class ReportRepository : IReportRepository
             .ToListAsync();
     }
 
+    public async Task<Report?> GetByIdAsync(int id)
+    {
+        return await _context.Report
+            .Include(r => r.CheckList)
+            .Include(r => r.ReportControlData)
+            .Include(r => r.Client)
+            .Include(r => r.ReportCheckListItems)
+            .ThenInclude(item => item.ReportCheckListItemOptions)
+            .ThenInclude(option => option.CheckListItemOption)
+            .Include(r => r.ReportCheckListItems)
+            .ThenInclude(item => item.CheckListItem)
+            .FirstOrDefaultAsync(r => r.Id == id);
+    }
+
     public async Task<Report> CreateByTransactionAsync(Report reportModel)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
