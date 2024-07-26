@@ -17,7 +17,13 @@ public class ReportRepository : IReportRepository
 
     public async Task<List<Report>> GetAllAsync()
     {
-        return await _context.Report.ToListAsync();
+        return await _context.Report
+            .Include(r => r.CheckList)
+            .Include(r => r.ReportControlData)
+            .Include(r => r.Client)
+            // .Include(r => r.ReportCheckListItems)
+            // .ThenInclude(rcitem => rcitem.CheckListItem)
+            .ToListAsync();
     }
 
     // public async Task<Report?> DeleteAsync(int id)

@@ -11,8 +11,20 @@ public static class ReportMappers
         {
             Id = reportModel.Id,
             Name = reportModel.Name,
-            CreatedDate = reportModel.CreatedDate,
-            Language = reportModel.Language
+            Description = reportModel.Description,
+            Content = reportModel.Content,
+            Type = reportModel.Type,
+            CreatedDate = DateTime.SpecifyKind(reportModel.CreatedDate, DateTimeKind.Utc),
+            Language = reportModel.Language,
+            CheckListId = reportModel.CheckListId,
+            CheckList = reportModel.CheckList.ToCheckListDto(),
+            ReportControlDataId = reportModel.ReportControlDataId,
+            ReportControlData = reportModel.ReportControlData.ToReportControlDataDto(),
+            ClientId = reportModel.ClientId,
+            Client = reportModel.Client.ToClientDtoForReportDto(),
+            ReportCheckListItems = reportModel.ReportCheckListItems
+                .Select(ritem => ritem.ToReportCheckListItemDto())
+                .ToList()
         };
     }
 

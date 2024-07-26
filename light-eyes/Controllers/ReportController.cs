@@ -22,7 +22,7 @@ namespace light_eyes.Controllers
         public async Task<IActionResult> GetAllReports()
         {
             var reportList = await _repository.GetAllAsync();
-            var reportDto = reportList.Select(x => x.ToReportDto());
+            var reportDto = reportList.Select(x => x.ToReportDto()).ToList();
             return Ok(reportDto);
         }
 
