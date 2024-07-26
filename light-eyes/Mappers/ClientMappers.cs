@@ -18,5 +18,18 @@ public static class ClientMappers
             ContactPhone = client.ContactPhone,
         };
     }
+
+    public static Client ToClientFromCreateDto(this CreateClientDto clientDto)
+    {
+        return new Client
+        {
+            FirstName = clientDto.FirstName,
+            LastName = clientDto.LastName,
+            CompanyName = clientDto.CompanyName,
+            Area = clientDto.Area,
+            ContactEmail = clientDto.ContactEmail,
+            ContactPhone = clientDto.ContactPhone
+        };
+    }
     
 }

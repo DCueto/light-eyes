@@ -26,6 +26,49 @@ public class ReportRepository : IReportRepository
             .ToListAsync();
     }
 
+    public async Task<Report> CreateByTransactionAsync(Report reportModel)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var newReport = new Report
+            {
+                Name = reportModel.Name,
+                Description = reportModel.Description,
+                Content = reportModel.Content,
+                Type = reportModel.Type,
+                CreatedDate = reportModel.CreatedDate.ToUniversalTime(),
+                Language = reportModel.Language,
+                CheckListId = reportModel.CheckListId,
+                ReportControlData = reportModel.ReportControlData,
+                Client = reportModel.Client,
+                ReportCheckListItems = reportModel.ReportCheckListItems
+                    .Select(item => new ReportCheckListItem
+                    {
+                        CheckListItemId = item.CheckListItemId,
+                        ReportCheckListItemOptions = item.ReportCheckListItemOptions
+                            .Select(option => new ReportCheckListItemOption
+                            {
+                                CheckListItemOptionId = option.CheckListItemOptionId,
+                                IsSelected = option.IsSelected
+                            }).ToList()
+                    }).ToList()
+            };
+
+            await _context.Report.AddAsync(newReport);
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+            return newReport;
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
     // public async Task<Report?> DeleteAsync(int id)
     // {
     //     var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);

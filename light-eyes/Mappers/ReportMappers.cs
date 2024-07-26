@@ -27,16 +27,26 @@ public static class ReportMappers
                 .ToList()
         };
     }
+    
 
-    // public static Report ToReportFromCreateDto(this CreateReportRequestDto reportDto)
-    // {
-    //     return new Report
-    //     {
-    //         Name = reportDto.Name,
-    //         CreatedDate = reportDto.CreatedDate,
-    //         Language = reportDto.Language
-    //     };
-    // }
+    public static Report ToReportFromCreateDto(this CreateReportRequestDto reportDto)
+    {
+        return new Report
+        {
+            Name = reportDto.Name,
+            Description = reportDto.Description,
+            Content = reportDto.Content,
+            Type = reportDto.Type,
+            CreatedDate = DateTime.SpecifyKind(reportDto.CreatedDate, DateTimeKind.Utc),
+            Language = reportDto.Language,
+            CheckListId = reportDto.CheckListId,
+            ReportControlData = reportDto.ReportControlData.ToReportControlDataFromCreateDto(),
+            Client = reportDto.Client.ToClientFromCreateDto(),
+            ReportCheckListItems = reportDto.ReportCheckListItems
+                .Select(i => i.ToReportCheckListItemFromCreateDto())
+                .ToList()
+        };
+    }
 
     // public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
     // {

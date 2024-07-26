@@ -18,4 +18,16 @@ public static class ReportCheckListItemMappers
                 .ToList()
         };
     }
+
+    public static ReportCheckListItem ToReportCheckListItemFromCreateDto(
+        this CreateReportCheckListItemDto reportCheckListItemDto)
+    {
+        return new ReportCheckListItem
+        {
+            CheckListItemId = reportCheckListItemDto.CheckListItemId,
+            ReportCheckListItemOptions = reportCheckListItemDto.ReportCheckListItemOptions
+                .Select(option => option.ToReportCheckListItemOptionFromCreateDto())
+                .ToList()
+        };
+    }
 }

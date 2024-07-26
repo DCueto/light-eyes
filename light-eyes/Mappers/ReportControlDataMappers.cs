@@ -19,4 +19,17 @@ public static class ReportControlDataMappers
             ReportId = reportControlData.ReportId
         };
     }
+
+    public static ReportControlData ToReportControlDataFromCreateDto(this CreateReportControlDataDto reportControlDataDto)
+    {
+        return new ReportControlData
+        {
+            ReviewDate = DateTime.SpecifyKind(reportControlDataDto.ReviewDate, DateTimeKind.Utc),
+            CreatedBy = reportControlDataDto.CreatedBy,
+            ValidatedBy = reportControlDataDto.ValidatedBy,
+            ReviewedBy = reportControlDataDto.ReviewedBy,
+            DocumentCode = reportControlDataDto.DocumentCode,
+            Department = reportControlDataDto.Department
+        };
+    }
 }

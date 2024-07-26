@@ -1,3 +1,4 @@
+using light_eyes.DTOs.CheckListItemOption;
 using light_eyes.DTOs.ReportCheckListItemOption;
 using light_eyes.Models;
 
@@ -15,6 +16,16 @@ public static class ReportCheckListItemOptionMappers
             CheckListItemOptionId = reportCheckListOption.CheckListItemOptionId,
             CheckListItemOption = reportCheckListOption.CheckListItemOption.ToCheckListItemOptionDto(),
             IsSelected = reportCheckListOption.IsSelected
+        };
+    }
+
+    public static ReportCheckListItemOption ToReportCheckListItemOptionFromCreateDto(
+        this CreateReportCheckListItemOptionDto optionDto)
+    {
+        return new ReportCheckListItemOption
+        {
+            CheckListItemOptionId = optionDto.CheckListItemOptionId,
+            IsSelected = optionDto.IsSelected
         };
     }
 }

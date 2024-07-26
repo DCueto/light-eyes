@@ -12,7 +12,8 @@ public class CreateReportRequestDto
     public string Type { get; set; }
     public DateTime CreatedDate { get; set; }
     public string Language { get; set; }
-    public CreateReportControlDataDto ReportControlDataDto { get; set; }
+    public int CheckListId { get; set; }
+    public CreateReportControlDataDto ReportControlData { get; set; }
     
     // Client should be created apart so on report create process don't create repeated clients with different ids
     // So when you create a report you should be able to create or select an existing client
@@ -21,5 +22,5 @@ public class CreateReportRequestDto
     // For this MVP, it needs to be there for creating a client and get that data later.
     public CreateClientDto Client { get; set; }
     
-    public List<CreateReportCheckListItemDto> ReportCheckListItemsDto { get; set; } = new List<CreateReportCheckListItemDto>();
+    public List<CreateReportCheckListItemDto> ReportCheckListItems { get; set; } = new List<CreateReportCheckListItemDto>();
 }

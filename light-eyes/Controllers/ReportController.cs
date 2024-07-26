@@ -11,19 +11,34 @@ namespace light_eyes.Controllers
     [ApiController]
     public class ReportController : ControllerBase 
     {
-        private readonly IReportRepository _repository;
+        private readonly IReportRepository _reportRepository;
 
         public ReportController(IReportRepository reportRepository)
         {
-            _repository = reportRepository;
+            _reportRepository = reportRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllReports()
         {
-            var reportList = await _repository.GetAllAsync();
+            var reportList = await _reportRepository.GetAllAsync();
             var reportDto = reportList.Select(x => x.ToReportDto()).ToList();
             return Ok(reportDto);
+        }
+
+        [HttpPost("createByTransaction")]
+        public async Task<ActionResult<Report>> CreateByTransaction([FromBody] CreateReportRequestDto createReportDto)
+        {
+            try
+            {
+                var report = createReportDto.ToReportFromCreateDto();
+                var transactionReport = await _reportRepository.CreateByTransactionAsync(report);
+                return Ok(transactionReport.ToReportDto()); // Change to CreatedAtAction actionResult method
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
         }
 
         // [HttpGet("{id:int}")]
