@@ -14,4 +14,5 @@ public class CheckList
     // public int? AppUserId { get; set; }
 
     public List<CheckListItem> CheckListItems { get; set; } = new List<CheckListItem>();
+    public List<Report>? Reports { get; set; }
 }

@@ -17,49 +17,82 @@ public class ReportRepository : IReportRepository
 
     public async Task<List<Report>> GetAllAsync()
     {
-        return await _context.Report.ToListAsync();
+        return await _context.Report
+            .Include(r => r.CheckList)
+            .Include(r => r.ReportControlData)
+            .Include(r => r.Client)
+            // .Include(r => r.ReportCheckListItems)
+            // .ThenInclude(rcitem => rcitem.CheckListItem)
+            .ToListAsync();
     }
 
-    public  async Task<Report?> GetByIdAsync(int id)
+    public async Task<Report?> GetByIdAsync(int id)
     {
-        return await _context.Report.FindAsync(id);
+        return await _context.Report
+            .Include(r => r.CheckList)
+            .Include(r => r.ReportControlData)
+            .Include(r => r.Client)
+            .Include(r => r.ReportCheckListItems)
+            .ThenInclude(item => item.ReportCheckListItemOptions)
+            .ThenInclude(option => option.CheckListItemOption)
+            .Include(r => r.ReportCheckListItems)
+            .ThenInclude(item => item.CheckListItem)
+            .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public async Task<Report> CreatAsync(Report reportModel)
+    public async Task<Report> CreateByTransactionAsync(Report reportModel)
     {
-         _context.Report.Add(reportModel);
-        await _context.SaveChangesAsync();
-        return reportModel;
-    }
+        using var transaction = await _context.Database.BeginTransactionAsync();
 
-    public async Task<Report?> UpdateAsync(int id, UpdateReportRequestDto updateReportDto)
-    {
-        var existingReport = await _context.Report.FirstOrDefaultAsync(X=> X.ReportId == id);
-        if (existingReport == null)
+        try
         {
-            return null;
+            var newReport = new Report
+            {
+                Name = reportModel.Name,
+                Description = reportModel.Description,
+                Content = reportModel.Content,
+                Type = reportModel.Type,
+                CreatedDate = reportModel.CreatedDate.ToUniversalTime(),
+                Language = reportModel.Language,
+                CheckListId = reportModel.CheckListId,
+                ReportControlData = reportModel.ReportControlData,
+                Client = reportModel.Client,
+                ReportCheckListItems = reportModel.ReportCheckListItems
+                    .Select(item => new ReportCheckListItem
+                    {
+                        CheckListItemId = item.CheckListItemId,
+                        ReportCheckListItemOptions = item.ReportCheckListItemOptions
+                            .Select(option => new ReportCheckListItemOption
+                            {
+                                CheckListItemOptionId = option.CheckListItemOptionId,
+                                IsSelected = option.IsSelected
+                            }).ToList()
+                    }).ToList()
+            };
+
+            await _context.Report.AddAsync(newReport);
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+            return newReport;
         }
-
-        existingReport.Name = updateReportDto.Name;
-        existingReport.CreatedDate = updateReportDto.CreatedDate;
-        existingReport.Language = updateReportDto.Language;
-
-        await _context.SaveChangesAsync();
-
-        return existingReport;
-
-    }
-
-    public async Task<Report?> DeleteAsync(int id)
-    {
-        var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.ReportId == id);
-        if (reportModel == null)
+        catch (Exception e)
         {
-            return null;
+            await transaction.RollbackAsync();
+            throw;
         }
-
-        _context.Report.Remove(reportModel);
-        await _context.SaveChangesAsync();
-        return reportModel;
     }
+
+    // public async Task<Report?> DeleteAsync(int id)
+    // {
+    //     var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
+    //     if (reportModel == null)
+    //     {
+    //         return null;
+    //     }
+    //
+    //     _context.Report.Remove(reportModel);
+    //     await _context.SaveChangesAsync();
+    //     return reportModel;
+    // }
 }
