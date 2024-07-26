@@ -54,13 +54,13 @@ public static class CheckListItemItemMappers
         };
     }
     
-    public static CheckListItem ToCheckListItemFromUpdateDto(this UpdateCheckListItemDto updateListDto)
+    public static CheckListItem ToCheckListItemFromUpdateDto(this UpdateCheckListItemDto updateListItemDto)
     {
         return new CheckListItem
         {
-            Content = updateListDto.Content,
-            CheckListItemOptions = updateListDto.CheckListItemOptions
-                .Select(c => c.ToCheckListItemOption())
+            Content = updateListItemDto.Content,
+            CheckListItemOptions = updateListItemDto.CheckListItemOptions
+                .Select(c => c.ToCheckListItemOptionFromUpdateDto())
                 .ToList()
         };
     }

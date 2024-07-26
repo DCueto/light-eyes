@@ -9,30 +9,51 @@ public static class ReportMappers
     {
         return new ReportDto
         {
-            ReportId = reportModel.ReportId,
+            Id = reportModel.Id,
             Name = reportModel.Name,
-            CreatedDate = reportModel.CreatedDate,
-            Language = reportModel.Language
+            Description = reportModel.Description,
+            Content = reportModel.Content,
+            Type = reportModel.Type,
+            CreatedDate = DateTime.SpecifyKind(reportModel.CreatedDate, DateTimeKind.Utc),
+            Language = reportModel.Language,
+            CheckListId = reportModel.CheckListId,
+            CheckList = reportModel.CheckList.ToCheckListDto(),
+            ReportControlDataId = reportModel.ReportControlDataId,
+            ReportControlData = reportModel.ReportControlData.ToReportControlDataDto(),
+            ClientId = reportModel.ClientId,
+            Client = reportModel.Client.ToClientDtoForReportDto(),
+            ReportCheckListItems = reportModel.ReportCheckListItems
+                .Select(ritem => ritem.ToReportCheckListItemDto())
+                .ToList()
         };
     }
+    
 
     public static Report ToReportFromCreateDto(this CreateReportRequestDto reportDto)
     {
         return new Report
         {
             Name = reportDto.Name,
-            CreatedDate = reportDto.CreatedDate,
-            Language = reportDto.Language
+            Description = reportDto.Description,
+            Content = reportDto.Content,
+            Type = reportDto.Type,
+            CreatedDate = DateTime.SpecifyKind(reportDto.CreatedDate, DateTimeKind.Utc),
+            Language = reportDto.Language,
+            CheckListId = reportDto.CheckListId,
+            ReportControlData = reportDto.ReportControlData.ToReportControlDataFromCreateDto(),
+            Client = reportDto.Client.ToClientFromCreateDto(),
+            ReportCheckListItems = reportDto.ReportCheckListItems
+                .Select(i => i.ToReportCheckListItemFromCreateDto())
+                .ToList()
         };
     }
 
-    public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
-    {
-        return new Report()
-        {
-            Name = updateReportDto.Name,
-            CreatedDate = updateReportDto.CreatedDate,
-            Language = updateReportDto.Language
-        };
-    }
+    // public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
+    // {
+    //     return new Report()
+    //     {
+    //         Name = updateReportDto.Name,
+    //         Language = updateReportDto.Language
+    //     };
+    // }
 }

@@ -14,4 +14,6 @@ public class CheckListItemOption
     [ForeignKey("CheckListItem")]
     public int CheckListItemId { get; set; }
     public CheckListItem CheckListItem { get; set; }
+    
+    public List<ReportCheckListItemOption>? ReportCheckListItemOptions { get; set; }
 }

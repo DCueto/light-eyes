@@ -1,11 +1,10 @@
-﻿using light_eyes.DTOs.CheckList;
-using light_eyes.DTOs.Client;
+using light_eyes.DTOs.CheckList;
 using light_eyes.DTOs.ReportCheckListItem;
 using light_eyes.DTOs.ReportControlData;
 
 namespace light_eyes.DTO.Report;
 
-public class ReportDto
+public class ReportForClientDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -16,13 +15,12 @@ public class ReportDto
     public string Language { get; set; }
     
     public int CheckListId { get; set; }
-    public CheckListDto CheckList { get; set; }
+    public CheckListDto CheckListDto { get; set; }
     
     public int ReportControlDataId { get; set; }
-    public ReportControlDataDto ReportControlData { get; set; }
+    public ReportControlDataDto ReportControlDataDto { get; set; }
     
     public int ClientId { get; set; }
-    public ClientDtoForReportDto Client { get; set; }
     
-    public List<ReportCheckListItemDto> ReportCheckListItems { get; set; } = new List<ReportCheckListItemDto>();
+    public List<ReportCheckListItemDto> ReportCheckListItemsDto { get; set; } = new List<ReportCheckListItemDto>();
 }

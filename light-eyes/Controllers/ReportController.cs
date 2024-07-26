@@ -11,25 +11,25 @@ namespace light_eyes.Controllers
     [ApiController]
     public class ReportController : ControllerBase 
     {
-        private readonly IReportRepository _repository;
+        private readonly IReportRepository _reportRepository;
 
         public ReportController(IReportRepository reportRepository)
         {
-            _repository = reportRepository;
+            _reportRepository = reportRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllReports()
+        public async Task<ActionResult<List<ReportDto>>> GetAllReports()
         {
-            var reportList = await _repository.GetAllAsync();
-            var reportDto = reportList.Select(x => x.ToReportDto());
+            var reportList = await _reportRepository.GetAllAsync();
+            var reportDto = reportList.Select(x => x.ToReportDto()).ToList();
             return Ok(reportDto);
         }
 
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<ActionResult<ReportDto>> GetById([FromRoute] int id)
         {
-            var report = await _repository.GetByIdAsync(id);
+            var report = await _reportRepository.GetByIdAsync(id);
             if (report == null)
             {
                 return NotFound();
@@ -38,40 +38,35 @@ namespace light_eyes.Controllers
             return Ok(report.ToReportDto());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateReportRequestDto reportDto)
+        [HttpPost("createByTransaction")]
+        public async Task<ActionResult<Report>> CreateByTransaction([FromBody] CreateReportRequestDto createReportDto)
         {
-            var reportModel = reportDto.ToReportFromCreateDto();
-            await _repository.CreatAsync(reportModel);
-            return CreatedAtAction(nameof(GetById), new { id = reportModel.ReportId }, reportModel.ToReportDto());
-
-        }
-
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateReportRequestDto updateDto)
-        {
-            var reportModel =await _repository.UpdateAsync(id , updateDto);
-            if (reportModel == null)
+            try
             {
-                return NotFound();
+                var report = createReportDto.ToReportFromCreateDto();
+                var transactionReport = await _reportRepository.CreateByTransactionAsync(report);
+                return CreatedAtAction(nameof(GetById), new { id = transactionReport.Id }, 
+                    transactionReport.ToReportDto());
             }
-
-            return Ok(reportModel.ToReportDto());
-        }
-
-        [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            var reportModel = await _repository.DeleteAsync(id);
-            if (reportModel == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return StatusCode(500, $"Internal server error: {e.Message}");
             }
-
-            return NoContent();
         }
+        
+        
+        // [HttpDelete]
+        // [Route("{id:int}")]
+        // public async Task<IActionResult> Delete([FromRoute] int id)
+        // {
+        //     var reportModel = await _repository.DeleteAsync(id);
+        //     if (reportModel == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     return NoContent();
+        // }
         
     }
 }

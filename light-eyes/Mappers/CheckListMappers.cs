@@ -45,7 +45,7 @@ public static class CheckListMappers
             Description = updateListDto.Description,
             Language = updateListDto.Language,
             CheckListItems = updateListDto.CheckListItems
-                .Select(c => c.ToCheckListItem())
+                .Select(c => c.ToCheckListItemFromUpdateDto())
                 .ToList()
         };
     }
@@ -70,7 +70,7 @@ public static class CheckListMappers
             // If item from dto doesn't exists then add it to the existing checkList
             if (existingItem == null)
             {
-                checkList.CheckListItems.Add(itemFromDto.ToCheckListItem());
+                checkList.CheckListItems.Add(itemFromDto.ToCheckListItemFromUpdateDto());
             }
             else
             {
@@ -81,7 +81,7 @@ public static class CheckListMappers
         return checkList;
     }
 
-    public static void UpdateChecklistItemFromDto(this CheckListItem checkListItem, CheckListItemDto itemDto)
+    public static void UpdateChecklistItemFromDto(this CheckListItem checkListItem, UpdateCheckListItemDto itemDto)
     {
         checkListItem.Content = itemDto.Content;
         
@@ -93,7 +93,7 @@ public static class CheckListMappers
 
             if (existingOption == null)
             {
-                checkListItem.CheckListItemOptions.Add(optionFromDto.ToCheckListItemOption());
+                checkListItem.CheckListItemOptions.Add(optionFromDto.ToCheckListItemOptionFromUpdateDto());
             }
             else
             {
@@ -103,7 +103,7 @@ public static class CheckListMappers
     }
 
     public static void UpdateChecklistItemOptionFromDto(this CheckListItemOption checkListItemOption,
-        CheckListItemOptionDto optionDto)
+        UpdateCheckListItemOptionDto optionDto)
     {
         checkListItemOption.Content = optionDto.Content;
         checkListItemOption.IsPositive = optionDto.IsPositive;
