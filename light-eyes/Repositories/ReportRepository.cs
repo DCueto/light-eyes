@@ -20,46 +20,16 @@ public class ReportRepository : IReportRepository
         return await _context.Report.ToListAsync();
     }
 
-    public  async Task<Report?> GetByIdAsync(int id)
-    {
-        return await _context.Report.FindAsync(id);
-    }
-
-    public async Task<Report> CreatAsync(Report reportModel)
-    {
-         _context.Report.Add(reportModel);
-        await _context.SaveChangesAsync();
-        return reportModel;
-    }
-
-    public async Task<Report?> UpdateAsync(int id, UpdateReportRequestDto updateReportDto)
-    {
-        var existingReport = await _context.Report.FirstOrDefaultAsync(X=> X.Id == id);
-        if (existingReport == null)
-        {
-            return null;
-        }
-
-        existingReport.Name = updateReportDto.Name;
-        existingReport.CreatedDate = updateReportDto.CreatedDate;
-        existingReport.Language = updateReportDto.Language;
-
-        await _context.SaveChangesAsync();
-
-        return existingReport;
-
-    }
-
-    public async Task<Report?> DeleteAsync(int id)
-    {
-        var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
-        if (reportModel == null)
-        {
-            return null;
-        }
-
-        _context.Report.Remove(reportModel);
-        await _context.SaveChangesAsync();
-        return reportModel;
-    }
+    // public async Task<Report?> DeleteAsync(int id)
+    // {
+    //     var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
+    //     if (reportModel == null)
+    //     {
+    //         return null;
+    //     }
+    //
+    //     _context.Report.Remove(reportModel);
+    //     await _context.SaveChangesAsync();
+    //     return reportModel;
+    // }
 }

@@ -16,23 +16,22 @@ public static class ReportMappers
         };
     }
 
-    public static Report ToReportFromCreateDto(this CreateReportRequestDto reportDto)
-    {
-        return new Report
-        {
-            Name = reportDto.Name,
-            CreatedDate = reportDto.CreatedDate,
-            Language = reportDto.Language
-        };
-    }
+    // public static Report ToReportFromCreateDto(this CreateReportRequestDto reportDto)
+    // {
+    //     return new Report
+    //     {
+    //         Name = reportDto.Name,
+    //         CreatedDate = reportDto.CreatedDate,
+    //         Language = reportDto.Language
+    //     };
+    // }
 
-    public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
-    {
-        return new Report()
-        {
-            Name = updateReportDto.Name,
-            CreatedDate = updateReportDto.CreatedDate,
-            Language = updateReportDto.Language
-        };
-    }
+    // public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
+    // {
+    //     return new Report()
+    //     {
+    //         Name = updateReportDto.Name,
+    //         Language = updateReportDto.Language
+    //     };
+    // }
 }

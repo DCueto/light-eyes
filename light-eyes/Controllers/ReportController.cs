@@ -26,52 +26,31 @@ namespace light_eyes.Controllers
             return Ok(reportDto);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
-        {
-            var report = await _repository.GetByIdAsync(id);
-            if (report == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(report.ToReportDto());
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateReportRequestDto reportDto)
-        {
-            var reportModel = reportDto.ToReportFromCreateDto();
-            await _repository.CreatAsync(reportModel);
-            return CreatedAtAction(nameof(GetById), new { id = reportModel.Id }, reportModel.ToReportDto());
-
-        }
-
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateReportRequestDto updateDto)
-        {
-            var reportModel =await _repository.UpdateAsync(id , updateDto);
-            if (reportModel == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(reportModel.ToReportDto());
-        }
-
-        [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
-        {
-            var reportModel = await _repository.DeleteAsync(id);
-            if (reportModel == null)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
-        }
+        // [HttpGet("{id:int}")]
+        // public async Task<IActionResult> GetById([FromRoute] int id)
+        // {
+        //     var report = await _repository.GetByIdAsync(id);
+        //     if (report == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     return Ok(report.ToReportDto());
+        // }
+        //
+        //
+        // [HttpDelete]
+        // [Route("{id:int}")]
+        // public async Task<IActionResult> Delete([FromRoute] int id)
+        // {
+        //     var reportModel = await _repository.DeleteAsync(id);
+        //     if (reportModel == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     return NoContent();
+        // }
         
     }
 }
