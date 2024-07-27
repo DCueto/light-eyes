@@ -1,5 +1,6 @@
 using light_eyes.DTOs.Checklist;
 using light_eyes.DTOs.CheckList;
+using light_eyes.Helpers;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
@@ -22,6 +23,17 @@ namespace light_eyes.Controllers
         public async Task<ActionResult<List<CheckListDto>>> GetAll()
         {
             var checkList = await _checkListRepository.GetAllAsync();
+            var checkDto = checkList.Select(x => x.ToCheckListDto()).ToList();
+            return Ok(checkDto);
+        }
+        
+        [HttpGet("getAllChecklists")]
+        public async Task<ActionResult<List<CheckListDto>>> GetAllBasicChecklists([FromQuery] QueryChecklist queryChecklist)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var checkList = await _checkListRepository.GetAllBasicChecklistsAsync(queryChecklist);
             var checkDto = checkList.Select(x => x.ToCheckListDto()).ToList();
             return Ok(checkDto);
         }
