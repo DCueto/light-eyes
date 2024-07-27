@@ -28,13 +28,13 @@ namespace light_eyes.Controllers
         }
         
         [HttpGet("getAllChecklists")]
-        public async Task<ActionResult<List<CheckListDto>>> GetAllBasicChecklists([FromQuery] QueryChecklist queryChecklist)
+        public async Task<ActionResult<List<BasicCheckListDto>>> GetAllBasicChecklists([FromQuery] QueryChecklist queryChecklist)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
             var checkList = await _checkListRepository.GetAllBasicChecklistsAsync(queryChecklist);
-            var checkDto = checkList.Select(x => x.ToCheckListDto()).ToList();
+            var checkDto = checkList.Select(x => x.ToBasicCheckListDto()).ToList();
             return Ok(checkDto);
         }
 
