@@ -1,4 +1,5 @@
 using light_eyes.DTO.Report;
+using light_eyes.Helpers;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
@@ -24,6 +25,14 @@ namespace light_eyes.Controllers
             var reportList = await _reportRepository.GetAllAsync();
             var reportDto = reportList.Select(x => x.ToReportDto()).ToList();
             return Ok(reportDto);
+        }
+
+        [HttpGet("getAllReports")]
+        public async Task<ActionResult<List<BasicReportDto>>> GetAllBasicReports([FromQuery] QueryReport queryReport)
+        {
+            var reports = await _reportRepository.GetAllBasicReportsAsync(queryReport);
+            var reportsDto = reports.Select(x => x.ToBasicReportDto()).ToList();
+            return Ok(reportsDto);
         }
 
         [HttpGet("{id:int}")]

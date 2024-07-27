@@ -1,5 +1,6 @@
 ﻿using light_eyes.Data;
 using light_eyes.DTO.Report;
+using light_eyes.Helpers;
 using light_eyes.Interfaces;
 using light_eyes.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,23 @@ public class ReportRepository : IReportRepository
             .ToListAsync();
     }
 
+    public async Task<List<Report>> GetAllBasicReportsAsync(QueryReport queryReport)
+    {
+        var reports = _context.Report
+            .Include(r => r.ReportControlData)
+            .Include(r => r.Client)
+            .AsQueryable();
+        
+        // Filter reports by name
+        if (!string.IsNullOrWhiteSpace(queryReport.Name))
+            reports = reports.Where(r => r.Name.ToLower().Contains(queryReport.Name.ToLower()));
+        
+
+        // Pagination
+        var skipNumber = (queryReport.PageNumber - 1) * queryReport.PageSize;
+        return await reports.Skip(skipNumber).Take(queryReport.PageSize).ToListAsync();
+    }
+    
     public async Task<Report?> GetByIdAsync(int id)
     {
         return await _context.Report
