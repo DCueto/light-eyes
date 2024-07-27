@@ -27,7 +27,23 @@ public static class ReportMappers
                 .ToList()
         };
     }
-    
+
+    public static BasicReportDto ToBasicReportDto(this Report reportModel)
+    {
+        return new BasicReportDto
+        {
+            Id = reportModel.Id,
+            Name = reportModel.Name,
+            Description = reportModel.Description,
+            Type = reportModel.Type,
+            CreatedDate = DateTime.SpecifyKind(reportModel.CreatedDate, DateTimeKind.Utc),
+            Language = reportModel.Language,
+            ReportControlDataId = reportModel.ReportControlDataId,
+            ReportControlData = reportModel.ReportControlData.ToReportControlDataDto(),
+            ClientId = reportModel.ClientId,
+            Client = reportModel.Client.ToClientDtoForReportDto()
+        };
+    }
 
     public static Report ToReportFromCreateDto(this CreateReportRequestDto reportDto)
     {
