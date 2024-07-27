@@ -1,6 +1,7 @@
 ﻿using light_eyes.Data;
 using light_eyes.DTOs.Checklist;
 using light_eyes.DTOs.CheckList;
+using light_eyes.Helpers;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
@@ -26,6 +27,38 @@ public class CheckListRepository : ICheckListRepository
             .ToListAsync();
     }
 
+    // Gets All Checklist without item and options and, applies filtering, sorting and pagination
+    public async Task<List<CheckList>> GetAllBasicChecklistsAsync(QueryChecklist queryChecklist)
+    {
+        var checklists = _context.CheckList.AsQueryable();
+        
+        // Filtering by Name
+        if (!string.IsNullOrWhiteSpace(queryChecklist.Name))
+            checklists = checklists.Where(c => c.Name.ToLower().Contains(queryChecklist.Name.ToLower()));
+        
+        // Filtering by Language
+        if (!string.IsNullOrWhiteSpace(queryChecklist.Language))
+            checklists = checklists.Where(c => c.Language != null && c.Language.ToLower().Contains(queryChecklist.Language.ToLower()));
+        
+        
+        // Sorting
+        if (!string.IsNullOrWhiteSpace(queryChecklist.SortBy))
+        {
+            // Sort by CreatedDate
+            if (queryChecklist.SortBy.Equals("CreatedDate", StringComparison.Ordinal))
+            {
+                checklists = queryChecklist.IsDescending
+                    ? checklists.OrderByDescending(c => c.CreatedDate)
+                    : checklists.OrderBy(c => c.CreatedDate);
+            }
+        }
+        
+        // Pagination
+        var skipNumber = (queryChecklist.PageNumber - 1) * queryChecklist.PageSize;
+        return await checklists.Skip(skipNumber).Take(queryChecklist.PageSize).ToListAsync();
+    }
+
+    
     public async Task<CheckList?> GetByIdAsync(int id)
     {
         return await _context.CheckList

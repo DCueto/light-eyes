@@ -23,6 +23,18 @@ public static class CheckListMappers
         };
     }
 
+    public static BasicCheckListDto ToBasicCheckListDto(this CheckList checkListModel)
+    {
+        return new BasicCheckListDto
+        {
+            CheckListId = checkListModel.CheckListId,
+            Name = checkListModel.Name,
+            Description = checkListModel.Description,
+            CreatedDate = DateTime.SpecifyKind(checkListModel.CreatedDate, DateTimeKind.Utc),
+            Language = checkListModel.Language
+        };
+    }
+
     public static CheckList ToCheckListFromCreateDto(this CreateChecklistRequestDto checkListDto)
     {
         return new CheckList
