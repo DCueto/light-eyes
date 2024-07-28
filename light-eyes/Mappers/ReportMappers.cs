@@ -1,4 +1,6 @@
 ﻿using light_eyes.DTO.Report;
+using light_eyes.DTOs.ReportCheckListItem;
+using light_eyes.DTOs.ReportCheckListItemOption;
 using light_eyes.Models;
 
 namespace light_eyes.Mappers;
@@ -94,8 +96,51 @@ public static class ReportMappers
             report.Client = report.Client.UpdateClientFromDto(updateReportDto.ClientDto);
         
         // Update ReportCheckListItems
+        foreach (var itemDto in updateReportDto.ReportCheckListItemsDto)
+        {
+            var existingItem = report.ReportCheckListItems
+                .FirstOrDefault(item => item.Id == itemDto.Id);
+
+            if (existingItem == null)
+            {
+                report.ReportCheckListItems.Add(itemDto.ToReportCheckListItemFromUpdateDto());
+            }
+            else
+            {
+                existingItem.UpdateReportCheckListItemFromDto(itemDto);
+            }
+        }
 
         return report;
     }
+    
+    
+    // Update ItemOptions
+    public static void UpdateReportCheckListItemFromDto(this ReportCheckListItem item,
+        UpdateReportCheckListItemDto itemDto)
+    {
+        foreach (var optionFromDto in itemDto.ReportCheckListItemOptions)
+        {
+            var existingOption = item.ReportCheckListItemOptions
+                .FirstOrDefault(option => option.Id == optionFromDto.Id);
+
+            if (existingOption == null)
+            {
+                item.ReportCheckListItemOptions.Add(optionFromDto.ToReportCheckListItemOptionFromUpdateDto());
+            }
+            else
+            {
+                existingOption.UpdateReportCheckListItemOptionFromDto(optionFromDto);
+            }
+        }
+    }
+
+
+    public static void UpdateReportCheckListItemOptionFromDto(this ReportCheckListItemOption option,
+        UpdateReportCheckListItemOptionDto optionDto)
+    {
+        option.IsSelected = optionDto.IsSelected;
+    }
+    
     
 }

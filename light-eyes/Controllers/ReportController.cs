@@ -62,6 +62,31 @@ namespace light_eyes.Controllers
                 return StatusCode(500, $"Internal server error: {e.Message}");
             }
         }
+
+        [HttpPut("updateByTransaction/{reportId:int}")]
+        public async Task<ActionResult<Report>> UpdateByTransaction([FromRoute] int reportId, [FromBody] UpdateReportRequestDto updateReportDto)
+        {
+            try
+            {
+                var existingReport = await _reportRepository.GetByIdAsync(reportId);
+
+                if (existingReport == null)
+                    return NotFound();
+
+                var updatedReport = existingReport.UpdateReportFromDto(updateReportDto);
+                var reportUpdatedByTransaction =
+                    await _reportRepository.UpdateByTransactionAsync(updatedReport, updateReportDto);
+
+                if (reportUpdatedByTransaction == null)
+                    return StatusCode(500, "Has been an error through the transaction process");
+
+                return Ok(reportUpdatedByTransaction.ToReportDto());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
         
         
         // [HttpDelete]

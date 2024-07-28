@@ -30,4 +30,14 @@ public static class ReportCheckListItemMappers
                 .ToList()
         };
     }
+
+    public static ReportCheckListItem ToReportCheckListItemFromUpdateDto(this UpdateReportCheckListItemDto itemDto)
+    {
+        return new ReportCheckListItem
+        {
+            ReportCheckListItemOptions = itemDto.ReportCheckListItemOptions
+                .Select(option => option.ToReportCheckListItemOptionFromUpdateDto())
+                .ToList()
+        };
+    }
 }

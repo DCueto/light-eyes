@@ -107,6 +107,36 @@ public class ReportRepository : IReportRepository
 
         try
         {
+            // Remove items and options in existing current checklist that aren't into updateDto
+            // Remove items
+            var itemsIdsFromDto = updateReportDto.ReportCheckListItemsDto
+                .Select(i => i.Id).ToList();
+            var existingItemsToRemove = existingReport.ReportCheckListItems
+                .Where(i => !itemsIdsFromDto.Contains(i.Id)).ToList();
+            _context.ReportCheckListItems.RemoveRange(existingItemsToRemove);
+            
+            // Remove options
+            foreach (var itemFromDto in updateReportDto.ReportCheckListItemsDto)
+            {
+                var existingItem = existingReport.ReportCheckListItems
+                    .FirstOrDefault(i => i.Id == itemFromDto.Id);
+                if (existingItem != null)
+                {
+                    var optionsIdsFromDto = itemFromDto.ReportCheckListItemOptions
+                        .Select(o => o.Id)
+                        .ToList();
+
+                    var optionsToRemove = existingItem.ReportCheckListItemOptions
+                        .Where(o => !optionsIdsFromDto.Contains(o.Id))
+                        .ToList();
+                    
+                    _context.ReportCheckListItemOptions.RemoveRange(optionsToRemove);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+            
             return existingReport;
         }
         catch (Exception)
