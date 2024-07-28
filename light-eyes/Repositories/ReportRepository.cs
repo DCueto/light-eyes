@@ -101,6 +101,21 @@ public class ReportRepository : IReportRepository
         }
     }
 
+    public async Task<Report?> UpdateByTransactionAsync(Report existingReport, UpdateReportRequestDto updateReportDto)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            return existingReport;
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+    
     // public async Task<Report?> DeleteAsync(int id)
     // {
     //     var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
