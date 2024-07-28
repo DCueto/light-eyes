@@ -32,4 +32,17 @@ public static class ReportControlDataMappers
             Department = reportControlDataDto.Department
         };
     }
+
+    public static ReportControlData UpdateReportControlDataFromDto(this ReportControlData reportControlData,
+        UpdateReportControlDataDto updateReportControlDataDto)
+    {
+        reportControlData.ReviewDate = updateReportControlDataDto.ReviewDate.ToUniversalTime();
+        reportControlData.CreatedBy = updateReportControlDataDto.CreatedBy;
+        reportControlData.ValidatedBy = updateReportControlDataDto.ValidatedBy;
+        reportControlData.ReviewedBy = updateReportControlDataDto.ReviewedBy;
+        reportControlData.DocumentCode = updateReportControlDataDto.DocumentCode;
+        reportControlData.Department = updateReportControlDataDto.Department;
+
+        return reportControlData;
+    }
 }

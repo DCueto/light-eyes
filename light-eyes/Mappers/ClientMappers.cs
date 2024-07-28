@@ -31,5 +31,17 @@ public static class ClientMappers
             ContactPhone = clientDto.ContactPhone
         };
     }
+
+    public static Client UpdateClientFromDto(this Client client, UpdateClientDto updateClientDto)
+    {
+        client.FirstName = updateClientDto.FirstName;
+        client.LastName = updateClientDto.LastName;
+        client.CompanyName = updateClientDto.CompanyName;
+        client.Area = updateClientDto.Area;
+        client.ContactEmail = updateClientDto.ContactEmail;
+        client.ContactPhone = updateClientDto.ContactPhone;
+        
+        return client;
+    }
     
 }

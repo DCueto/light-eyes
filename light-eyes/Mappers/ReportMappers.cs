@@ -1,4 +1,6 @@
 ﻿using light_eyes.DTO.Report;
+using light_eyes.DTOs.ReportCheckListItem;
+using light_eyes.DTOs.ReportCheckListItemOption;
 using light_eyes.Models;
 
 namespace light_eyes.Mappers;
@@ -63,6 +65,7 @@ public static class ReportMappers
                 .ToList()
         };
     }
+    
 
     // public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
     // {
@@ -72,4 +75,72 @@ public static class ReportMappers
     //         Language = updateReportDto.Language
     //     };
     // }
+    
+    
+    // UPDATE REPORT TRANSACTION
+    // Updates an existing report with data coming from updateDto
+    public static Report UpdateReportFromDto(this Report report, UpdateReportRequestDto updateReportDto)
+    {
+        report.Name = updateReportDto.Name;
+        report.Description = updateReportDto.Description;
+        report.Content = updateReportDto.Content;
+        report.Type = updateReportDto.Type;
+        report.Language = updateReportDto.Language;
+        
+        // Update ReportControlData
+        report.ReportControlData =
+            report.ReportControlData.UpdateReportControlDataFromDto(updateReportDto.ReportControlDataDto);
+        
+        // Update Client Data
+        if( updateReportDto.ClientDto != null ) 
+            report.Client = report.Client.UpdateClientFromDto(updateReportDto.ClientDto);
+        
+        // Update ReportCheckListItems
+        foreach (var itemDto in updateReportDto.ReportCheckListItemsDto)
+        {
+            var existingItem = report.ReportCheckListItems
+                .FirstOrDefault(item => item.Id == itemDto.Id);
+
+            if (existingItem == null)
+            {
+                report.ReportCheckListItems.Add(itemDto.ToReportCheckListItemFromUpdateDto());
+            }
+            else
+            {
+                existingItem.UpdateReportCheckListItemFromDto(itemDto);
+            }
+        }
+
+        return report;
+    }
+    
+    
+    // Update ItemOptions
+    public static void UpdateReportCheckListItemFromDto(this ReportCheckListItem item,
+        UpdateReportCheckListItemDto itemDto)
+    {
+        foreach (var optionFromDto in itemDto.ReportCheckListItemOptions)
+        {
+            var existingOption = item.ReportCheckListItemOptions
+                .FirstOrDefault(option => option.Id == optionFromDto.Id);
+
+            if (existingOption == null)
+            {
+                item.ReportCheckListItemOptions.Add(optionFromDto.ToReportCheckListItemOptionFromUpdateDto());
+            }
+            else
+            {
+                existingOption.UpdateReportCheckListItemOptionFromDto(optionFromDto);
+            }
+        }
+    }
+
+
+    public static void UpdateReportCheckListItemOptionFromDto(this ReportCheckListItemOption option,
+        UpdateReportCheckListItemOptionDto optionDto)
+    {
+        option.IsSelected = optionDto.IsSelected;
+    }
+    
+    
 }

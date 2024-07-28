@@ -28,4 +28,13 @@ public static class ReportCheckListItemOptionMappers
             IsSelected = optionDto.IsSelected
         };
     }
+
+    public static ReportCheckListItemOption ToReportCheckListItemOptionFromUpdateDto(
+        this UpdateReportCheckListItemOptionDto optionDto)
+    {
+        return new ReportCheckListItemOption
+        {
+            IsSelected = optionDto.IsSelected
+        };
+    }
 }
