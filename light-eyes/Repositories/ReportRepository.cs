@@ -101,16 +101,61 @@ public class ReportRepository : IReportRepository
         }
     }
 
-    // public async Task<Report?> DeleteAsync(int id)
-    // {
-    //     var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
-    //     if (reportModel == null)
-    //     {
-    //         return null;
-    //     }
-    //
-    //     _context.Report.Remove(reportModel);
-    //     await _context.SaveChangesAsync();
-    //     return reportModel;
-    // }
+    public async Task<Report?> UpdateByTransactionAsync(Report existingReport, UpdateReportRequestDto updateReportDto)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            // Remove items and options in existing current checklist that aren't into updateDto
+            // Remove items
+            var itemsIdsFromDto = updateReportDto.ReportCheckListItemsDto
+                .Select(i => i.Id).ToList();
+            var existingItemsToRemove = existingReport.ReportCheckListItems
+                .Where(i => !itemsIdsFromDto.Contains(i.Id)).ToList();
+            _context.ReportCheckListItems.RemoveRange(existingItemsToRemove);
+            
+            // Remove options
+            foreach (var itemFromDto in updateReportDto.ReportCheckListItemsDto)
+            {
+                var existingItem = existingReport.ReportCheckListItems
+                    .FirstOrDefault(i => i.Id == itemFromDto.Id);
+                if (existingItem != null)
+                {
+                    var optionsIdsFromDto = itemFromDto.ReportCheckListItemOptions
+                        .Select(o => o.Id)
+                        .ToList();
+
+                    var optionsToRemove = existingItem.ReportCheckListItemOptions
+                        .Where(o => !optionsIdsFromDto.Contains(o.Id))
+                        .ToList();
+                    
+                    _context.ReportCheckListItemOptions.RemoveRange(optionsToRemove);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+            
+            return existingReport;
+        }
+        catch (Exception)
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+    
+    public async Task<Report?> DeleteAsync(int id)
+    {
+        var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
+        if (reportModel == null)
+        {
+            return null;
+        }
+    
+        _context.Report.Remove(reportModel);
+        await _context.SaveChangesAsync();
+        return reportModel;
+    }
 }
