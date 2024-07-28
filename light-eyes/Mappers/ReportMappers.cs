@@ -63,6 +63,7 @@ public static class ReportMappers
                 .ToList()
         };
     }
+    
 
     // public static Report ToReportFromUpdateDto(this UpdateReportRequestDto updateReportDto)
     // {
@@ -72,4 +73,29 @@ public static class ReportMappers
     //         Language = updateReportDto.Language
     //     };
     // }
+    
+    
+    // UPDATE REPORT TRANSACTION
+    // Updates an existing report with data coming from updateDto
+    public static Report UpdateReportFromDto(this Report report, UpdateReportRequestDto updateReportDto)
+    {
+        report.Name = updateReportDto.Name;
+        report.Description = updateReportDto.Description;
+        report.Content = updateReportDto.Content;
+        report.Type = updateReportDto.Type;
+        report.Language = updateReportDto.Language;
+        
+        // Update ReportControlData
+        report.ReportControlData =
+            report.ReportControlData.UpdateReportControlDataFromDto(updateReportDto.ReportControlDataDto);
+        
+        // Update Client Data
+        if( updateReportDto.ClientDto != null ) 
+            report.Client = report.Client.UpdateClientFromDto(updateReportDto.ClientDto);
+        
+        // Update ReportCheckListItems
+
+        return report;
+    }
+    
 }

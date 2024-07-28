@@ -20,7 +20,7 @@ public class UpdateReportRequestDto
     // So on that process should use its unique endpoint and into this CreateReportDto shouldn't exist the ClientDto
     // For this MVP, it needs to be there for creating a client and get that data later.
     
-    public UpdateClientDto? Client { get; set; }
+    public UpdateClientDto? ClientDto { get; set; }
     
     public List<UpdateReportCheckListItemDto> ReportCheckListItemsDto { get; set; } = new List<UpdateReportCheckListItemDto>();
 }

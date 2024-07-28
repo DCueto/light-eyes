@@ -2,8 +2,6 @@ namespace light_eyes.DTOs.ReportControlData;
 
 public class UpdateReportControlDataDto
 {
-    public int Id { get; set; }
-    
     public DateTime ReviewDate { get; set; }
     public string CreatedBy { get; set; }
     public string ValidatedBy { get; set; }
