@@ -12,5 +12,5 @@ public interface IReportRepository
     Task<Report> CreateByTransactionAsync(Report report);
     Task<Report?> UpdateByTransactionAsync(Report existingReport, UpdateReportRequestDto updateReportRequestDto);
     Task<Report?> GetByIdAsync(int id);
-    // Task<Report?> DeleteAsync(int id);
+    Task<Report?> DeleteAsync(int id);
 }

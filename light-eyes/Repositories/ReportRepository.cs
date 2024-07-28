@@ -146,16 +146,16 @@ public class ReportRepository : IReportRepository
         }
     }
     
-    // public async Task<Report?> DeleteAsync(int id)
-    // {
-    //     var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
-    //     if (reportModel == null)
-    //     {
-    //         return null;
-    //     }
-    //
-    //     _context.Report.Remove(reportModel);
-    //     await _context.SaveChangesAsync();
-    //     return reportModel;
-    // }
+    public async Task<Report?> DeleteAsync(int id)
+    {
+        var reportModel = await _context.Report.FirstOrDefaultAsync(x=>x.Id == id);
+        if (reportModel == null)
+        {
+            return null;
+        }
+    
+        _context.Report.Remove(reportModel);
+        await _context.SaveChangesAsync();
+        return reportModel;
+    }
 }
