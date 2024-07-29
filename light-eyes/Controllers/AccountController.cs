@@ -46,7 +46,7 @@ public class AccountController : ControllerBase
             {  
                 UserName = user.UserName,
                 Email = user.Email,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 IsActive = user.IsActive
             });
     }
@@ -76,7 +76,7 @@ public class AccountController : ControllerBase
                             UserName = appUser.UserName,
                             Email = appUser.Email,
                             IsActive = appUser.IsActive,
-                            Token = _tokenService.CreateToken(appUser),
+                            Token = await _tokenService.CreateToken(appUser),
                             Message = "User registered successfully. Waiting for admin approval."
                         }
                         );
