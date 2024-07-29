@@ -7,12 +7,13 @@ namespace light_eyes.Extensions;
 
 public static class StartupDbExtensions
 {
-    public static async Task CreateDbIfNotExists(this IHost host)
+    public static async Task CreateDbIfNotExistsAndInitUserAdmin(this IHost host)
     {
         using var scope = host.Services.CreateScope();
         var services = scope.ServiceProvider;
 
         var dbContextService = services.GetRequiredService<AppDbContext>();
+        var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
         try
         {
@@ -21,6 +22,9 @@ public static class StartupDbExtensions
             
             // Custom static class and method that creates table rows if there is not any row data into db
             // DBInitializerSeedData.InitializeDatabase(dbContextService);
+            
+            // Initialize admin user
+            
         }
         catch (Exception e)
         {
@@ -29,11 +33,8 @@ public static class StartupDbExtensions
         }
     }
 
-    public static async Task InitializeAdminUser(IServiceProvider serviceProvider)
+    private static async Task InitializeAdminUser(UserManager<AppUser> userManager)
     {
-        // var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
-
         var adminEmail = "admin@light-eyes.com";
         var adminUsername = "admin";
         var adminPassword = "AdminP@ssword123!";
