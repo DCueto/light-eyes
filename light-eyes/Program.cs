@@ -113,20 +113,6 @@ app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
 
-// Creates admin user by default
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        await StartupDbExtensions.InitializeAdminUser(services);
-    }
-    catch (Exception e)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(e, "An error occurred while seeding the database");
-    }
-}
+await app.CreateDbIfNotExistsAndInitUserAdmin();
 
-await app.CreateDbIfNotExists();
 await app.RunAsync();
