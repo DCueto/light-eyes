@@ -8,5 +8,4 @@ public class LoginDto
     public string? UserName { get; set; }
     [Required] 
     public string? Password { get; set; }
-    public bool IsActive { get; set; }
 }
