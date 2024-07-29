@@ -24,7 +24,7 @@ public static class StartupDbExtensions
             // DBInitializerSeedData.InitializeDatabase(dbContextService);
             
             // Initialize admin user
-            
+            await InitializeAdminUserAsync(userManager);
         }
         catch (Exception e)
         {
@@ -33,7 +33,7 @@ public static class StartupDbExtensions
         }
     }
 
-    private static async Task InitializeAdminUser(UserManager<AppUser> userManager)
+    private static async Task InitializeAdminUserAsync(UserManager<AppUser> userManager)
     {
         var adminEmail = "admin@light-eyes.com";
         var adminUsername = "admin";
