@@ -4,6 +4,7 @@ using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
 using light_eyes.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace light_eyes.Controllers
@@ -20,6 +21,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<ReportDto>>> GetAllReports()
         {
             var reportList = await _reportRepository.GetAllAsync();
@@ -28,6 +30,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet("getAllReports")]
+        [Authorize]
         public async Task<ActionResult<List<BasicReportDto>>> GetAllBasicReports([FromQuery] QueryReport queryReport)
         {
             var reports = await _reportRepository.GetAllBasicReportsAsync(queryReport);
@@ -36,6 +39,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<ActionResult<ReportDto>> GetById([FromRoute] int id)
         {
             var report = await _reportRepository.GetByIdAsync(id);
@@ -48,6 +52,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpPost("createByTransaction")]
+        [Authorize]
         public async Task<ActionResult<Report>> CreateByTransaction([FromBody] CreateReportRequestDto createReportDto)
         {
             try
@@ -64,6 +69,7 @@ namespace light_eyes.Controllers
         }
 
         [HttpPut("updateByTransaction/{reportId:int}")]
+        [Authorize]
         public async Task<ActionResult<Report>> UpdateByTransaction([FromRoute] int reportId, [FromBody] UpdateReportRequestDto updateReportDto)
         {
             try
