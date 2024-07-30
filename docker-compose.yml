@@ -10,9 +10,9 @@ services:
     platform: linux/amd64  # Specify platform
     environment:
       - ACCEPT_EULA=Y   # Accept the End-User License Agreement
-      - POSTGRES_DB=webApi
-      - POSTGRES_USER=sa
-      - POSTGRES_PASSWORD=LightEyesP@ssw0rd # Set the 'sa' user password
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD} # Set the 'sa' user password
     ports:
       - "5432:5432"
     networks:
@@ -33,7 +33,7 @@ services:
       - light-eyes-net
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=postgresql;Database=webApi;Username=sa;Password=LightEyesP@ssw0rd;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
 
 volumes:
   postgresql-container-data:
