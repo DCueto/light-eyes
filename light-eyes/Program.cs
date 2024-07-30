@@ -1,11 +1,11 @@
 using light_eyes.Data;
+using light_eyes.Extensions;
 using light_eyes.Interfaces;
 using light_eyes.Models;
 using light_eyes.Repositories;
 using light_eyes.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -16,17 +16,37 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+
+builder.Services.AddCors(options =>
 {
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 6;
-}).AddEntityFrameworkStores<AppDbContext>();
+    options.AddPolicy(name: "AllowAll", policyBuilder =>
+    {
+        policyBuilder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequiredLength = 6;
+    })
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+    
+
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme =
+    options.DefaultAuthenticateScheme = 
         options.DefaultChallengeScheme =
             options.DefaultForbidScheme =
                 options.DefaultScheme =
@@ -34,6 +54,7 @@ builder.Services.AddAuthentication(options =>
                         options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
+    options.IncludeErrorDetails = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -42,19 +63,15 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
+        ValidateLifetime = true,
     };
-});
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    var conStrBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString("DefaultConnection"));
-    conStrBuilder.Password = builder.Configuration["DbPassword"];
-    var connection = conStrBuilder.ConnectionString;
-    options.UseSqlServer(connection);
 });
 
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
-builder.Services.AddScoped<ISectionRepository, SectionRepository>();
+builder.Services.AddScoped<ICheckListRepository, CheckListRepository>();
+builder.Services.AddScoped<ICheckListItemRepository, CheckListItemRepository>();
+builder.Services.AddScoped<ICheckListItemOptionRepository, CheckListItemOptionRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -98,8 +115,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
-app.Run();
+
+await app.CreateDbIfNotExistsAndInitUserAdmin();
+
+await app.RunAsync();

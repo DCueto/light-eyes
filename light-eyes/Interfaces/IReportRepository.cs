@@ -1,13 +1,16 @@
 ﻿using light_eyes.DTO.Report;
+using light_eyes.Helpers;
 using light_eyes.Models;
 
-namespace light_eyes.Repositories;
+namespace light_eyes.Interfaces;
 
 public interface IReportRepository
 {
     Task<List<Report>> GetAllAsync();
+    Task<List<Report>> GetAllBasicReportsAsync(QueryReport queryReport);
+
+    Task<Report> CreateByTransactionAsync(Report report);
+    Task<Report?> UpdateByTransactionAsync(Report existingReport, UpdateReportRequestDto updateReportRequestDto);
     Task<Report?> GetByIdAsync(int id);
-    Task<Report> CreatAsync(Report reportModel);
-    Task<Report?> UpdateAsync(int id, UpdateReportRequestDto updateReportDto);
     Task<Report?> DeleteAsync(int id);
 }

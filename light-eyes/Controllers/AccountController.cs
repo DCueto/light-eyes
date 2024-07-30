@@ -1,8 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
 using light_eyes.DTO.Account;
 using light_eyes.Interfaces;
 using light_eyes.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace light_eyes.Controllers;
 
@@ -19,29 +21,44 @@ public class AccountController : ControllerBase
         _tokenService = tokenService;
         _signInManager = signInManager;
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        var user = await _userManager.FindByNameAsync(loginDto.UserName.ToLower());
-        if (user == null)
-            return Unauthorized("Invalid Username!");
+        // Find By Name
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName.ToLower());
         
+        if (user == null) 
+            return Unauthorized("Invalid Username!");
+
+        if (!user.IsActive)
+            return Unauthorized("Your account is not activated by the admin.");
+        
+        // validates user password
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
         if (!result.Succeeded)
             return Unauthorized("Username not found or password incorrect");
-        
-        return Ok(new NewUserDto
-        {  
-            UserName = user.UserName,
-            Email = user.Email,
-            Token = _tokenService.CreateToken(user)
-        });
-    }
 
+        var token = await _tokenService.CreateToken(user);
+            
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken(token);
+
+        Console.WriteLine($"Expiration: {jwtToken.ValidTo}");
+        
+        return Ok(
+            new NewUserDto
+            {  
+                UserName = user.UserName,
+                Email = user.Email,
+                Token = token,
+                IsActive = user.IsActive
+            });
+    }
+    
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
@@ -52,7 +69,8 @@ public class AccountController : ControllerBase
             var appUser = new AppUser
             {
                 UserName = registerDto.UserName,
-                Email = registerDto.Email
+                Email = registerDto.Email,
+                IsActive = false
             };
             var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
             if (createdUser.Succeeded)
@@ -65,7 +83,9 @@ public class AccountController : ControllerBase
                         {
                             UserName = appUser.UserName,
                             Email = appUser.Email,
-                            Token = _tokenService.CreateToken(appUser)
+                            IsActive = appUser.IsActive,
+                            Token = await _tokenService.CreateToken(appUser),
+                            Message = "User registered successfully. Waiting for admin approval."
                         }
                         );
                 }

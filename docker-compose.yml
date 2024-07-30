@@ -1,0 +1,39 @@
+﻿version: '3.4'
+
+networks:
+  light-eyes-net:
+
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    platform: linux/amd64  # Specify platform
+    environment:
+      - ACCEPT_EULA=Y   # Accept the End-User License Agreement
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD} # Set the 'sa' user password
+    ports:
+      - "5432:5432"
+    networks:
+      - light-eyes-net
+    volumes:
+      - postgresql-container-data:/var/opt/mssql
+  light-eyes-api:
+    container_name: light-eyes-api
+    image: ${DOCKER_REGISTRY-}light-eyes-api
+    ports:
+      - "80:80"
+    build:
+      context: .
+      dockerfile: light-eyes/Dockerfile
+    depends_on:
+      - postgresql
+    networks:
+      - light-eyes-net
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
+
+volumes:
+  postgresql-container-data:
