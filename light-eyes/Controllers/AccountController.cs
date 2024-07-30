@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using light_eyes.DTO.Account;
 using light_eyes.Interfaces;
 using light_eyes.Models;
@@ -40,13 +41,20 @@ public class AccountController : ControllerBase
         var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
         if (!result.Succeeded)
             return Unauthorized("Username not found or password incorrect");
+
+        var token = await _tokenService.CreateToken(user);
+            
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken(token);
+
+        Console.WriteLine($"Expiration: {jwtToken.ValidTo}");
         
         return Ok(
             new NewUserDto
             {  
                 UserName = user.UserName,
                 Email = user.Email,
-                Token = await _tokenService.CreateToken(user),
+                Token = token,
                 IsActive = user.IsActive
             });
     }
@@ -62,7 +70,7 @@ public class AccountController : ControllerBase
             {
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
-                IsActive = false
+                IsActive = true
             };
             var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
             if (createdUser.Succeeded)
@@ -75,7 +83,7 @@ public class AccountController : ControllerBase
                         {
                             UserName = appUser.UserName,
                             Email = appUser.Email,
-                            IsActive = appUser.IsActive,
+                            IsActive = true,
                             Token = await _tokenService.CreateToken(appUser),
                             Message = "User registered successfully. Waiting for admin approval."
                         }
