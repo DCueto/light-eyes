@@ -70,7 +70,7 @@ public class AccountController : ControllerBase
             {
                 UserName = registerDto.UserName,
                 Email = registerDto.Email,
-                IsActive = true
+                IsActive = false
             };
             var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
             if (createdUser.Succeeded)
@@ -83,7 +83,7 @@ public class AccountController : ControllerBase
                         {
                             UserName = appUser.UserName,
                             Email = appUser.Email,
-                            IsActive = true,
+                            IsActive = appUser.IsActive,
                             Token = await _tokenService.CreateToken(appUser),
                             Message = "User registered successfully. Waiting for admin approval."
                         }

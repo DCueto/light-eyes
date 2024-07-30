@@ -14,6 +14,7 @@ public static class StartupDbExtensions
 
         var dbContextService = services.GetRequiredService<AppDbContext>();
         var userManager = services.GetRequiredService<UserManager<AppUser>>();
+        var configuration = services.GetRequiredService<IConfiguration>();
 
         try
         {
@@ -24,7 +25,7 @@ public static class StartupDbExtensions
             // DBInitializerSeedData.InitializeDatabase(dbContextService);
             
             // Initialize admin user
-            await InitializeAdminUserAsync(userManager);
+            await InitializeAdminUserAsync(userManager, configuration);
         }
         catch (Exception e)
         {
@@ -33,11 +34,14 @@ public static class StartupDbExtensions
         }
     }
 
-    private static async Task InitializeAdminUserAsync(UserManager<AppUser> userManager)
+    private static async Task InitializeAdminUserAsync(UserManager<AppUser> userManager, IConfiguration configuration)
     {
-        var adminEmail = "admin@light-eyes.com";
-        var adminUsername = "admin";
-        var adminPassword = "AdminP@ssword123!";
+        var adminSettings = configuration.GetSection("AdminSettings");
+        var adminEmail = adminSettings["Email"];
+        var adminUsername = adminSettings["Username"];
+        var adminPassword = adminSettings["Password"];
+        var adminRole = adminSettings["Role"];
+        
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
         if (adminUser == null)
@@ -47,7 +51,7 @@ public static class StartupDbExtensions
 
             if (createAdminResult.Succeeded)
             {
-                await userManager.AddToRoleAsync(admin, "Admin");
+                await userManager.AddToRoleAsync(admin, adminRole);
             }
         }
         
