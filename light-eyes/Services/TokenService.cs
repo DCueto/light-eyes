@@ -26,6 +26,7 @@ public class TokenService : ITokenService
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
         };
@@ -33,10 +34,11 @@ public class TokenService : ITokenService
         var roles = await _userManager.GetRolesAsync(user);
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
         
-        var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+        var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256Signature);
         
         // time set in days. Can be changed in hours too
-        var tokenExpires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JWT:ExpireDays"]));
+        var tokenExpires = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JWT:ExpireDays"]));
+        
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

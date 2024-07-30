@@ -4,10 +4,12 @@ using light_eyes.Helpers;
 using light_eyes.Interfaces;
 using light_eyes.Mappers;
 using light_eyes.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace light_eyes.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CheckListController : ControllerBase
@@ -18,7 +20,7 @@ namespace light_eyes.Controllers
         {
             _checkListRepository = checkListRepository;
         }
-
+        
         [HttpGet]
         public async Task<ActionResult<List<CheckListDto>>> GetAll()
         {
@@ -26,6 +28,7 @@ namespace light_eyes.Controllers
             var checkDto = checkList.Select(x => x.ToCheckListDto()).ToList();
             return Ok(checkDto);
         }
+        
         
         [HttpGet("getAllChecklists")]
         public async Task<ActionResult<List<BasicCheckListDto>>> GetAllBasicChecklists([FromQuery] QueryChecklist queryChecklist)
