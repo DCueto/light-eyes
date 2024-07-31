@@ -6,14 +6,15 @@
 - [Technical Competencies](#technical-competencies)
 - [Technologies](#technologies)
 - [Tools](#tools)
-- [Installation](#installation)
 - [Technical Operation](#technical-operation)
 - [Future Enhancements](#future-enhancements)
+- [Deployment](#deployment)
+- [Resources](#resources)
 - [Our Team](#out-team)
 
 ## General Information
 
-**Light Eyes Reports** is an innovative project developed for Light Eyes, part of Apolo Analytics, a cybersecurity company. This full-stack application automates the generation of customized cybersecurity consulting reports, providing a streamlined solution for both the company and its clients.
+**Light Eyes Reports** is an innovative project developed for Light Eyes, a cybersecurity company. This full-stack application automates the generation of customized cybersecurity consulting reports, providing a streamlined solution for both the company and its clients.
 
 ### Objectives:
 - **Automatic Report Generation:** Generate detailed and customized cybersecurity reports based on specified parameters.
@@ -60,8 +61,6 @@ List of Tools:
 - [XUnit](https://xunit.net/): For back-end testing.
 - [Docker Compose](https://docs.docker.com/compose/): Tool for defining and running multi-container Docker applications.
 
-## Installation
-
 ## Technical Operation
 
 ### Data Collection:
@@ -80,10 +79,25 @@ Consultants can access the platform via a web interface to configure parameters 
 
 In the next sprint, we plan to implement the following features:
 
-- **DOCX Report Generator:** Enable the generation of reports in DOCX format.
+- **DOCX and PDF Report Generator:** Enable the generation of reports in DOCX and PDF format.
 - **Preview Step:** Introduce a preview step for reports before final generation. This feature is not available yet.
+- **Save Reports in Database:** Store reports directly in the database.
+- **Implement Markdown Editor:** Add a markdown editor for report creation and modification.
+- **Edit Checklists and Reports:** Allow editing of already created and saved checklists and reports.
+- **Preview Report View:** Implement a preview view of the created report.
+- **Section Titles in Checklists:** Include titles between each section of the checklist.
+- **Company Style Adaptation:** Graphically adapt the styles to match the company's branding.
+- **User Feedback Implementation:** Offer more feedback to the user during the report creation process.
+- **Process Status Messages:** Inform users with messages about the status of the report creation process.
 
-## Deploy
+## Deployment
+- [Light Eyes Client](https://light-eyes-client-fs4wxwpji-daniels-projects-1629a465.vercel.app/auth): Deploy for FrontEnd.
+- [Light Eyes API](https://light-eyes-reports.live/swagger/index.html): Deploy for BackEnd.
+
+## Resources
+- [Light Eyes Design](https://www.figma.com/design/dtrGIfWZh3tb2KlXVKerbM/Final-Project?node-id=0-1&t=YKeKJnJ087I873I5-1): View of our design on Figma.
+- [Project Management Kanban Board](https://trello.com/b/dn13Bkos/final-project): View of our Kanban board on Trello.
+- [Light Eyes FrontEnd Repository](https://github.com/sandiaxcx/light-eyes-client): Github Repository for our Frontend code.
 
 ## Our Team:
 <p> <a href="https://github.com/xavimrg">
