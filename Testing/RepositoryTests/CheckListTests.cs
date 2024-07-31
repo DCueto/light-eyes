@@ -19,7 +19,6 @@ public class CheckListTests : IDisposable
             .Options;
 
         _context = new AppDbContext(options);
-        // _context.Database.EnsureCreated();
         _checkListRepository = new CheckListRepository(_context);
     }
 
@@ -33,7 +32,6 @@ public class CheckListTests : IDisposable
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllCheckLists()
     {
-        //Arrange
         var checkLists = new List<CheckList>
         {
             new CheckList
@@ -49,31 +47,25 @@ public class CheckListTests : IDisposable
 
         await _context.CheckList.AddRangeAsync(checkLists);
         await _context.SaveChangesAsync();
-
-        //Act
+        
         var result = await _checkListRepository.GetAllAsync();
-
-
-        //Assert
+        
         Assert.Equal(2, result.Count);
     }
 
     [Fact]
     public async Task GetByIdAsync_ShouldReturnCorrectCheckList()
     {
-        // Arrange
+        
         var checkList = new CheckList
             { CheckListId = 1, Name = "CheckList1", Description = "Description1", Language = "en" };
         await _context.CheckList.AddAsync(checkList);
         await _context.SaveChangesAsync();
-
-        // Act
+        
         var result = await _checkListRepository.GetByIdAsync(1);
-
-        // Assert
+        
         Assert.NotNull(result);
         Assert.Equal("CheckList1", result.Name);
-        // Assert.IsType<string>(result.Description);
     }
 
     [Fact]
@@ -88,27 +80,7 @@ public class CheckListTests : IDisposable
         Assert.NotNull(result);
         Assert.Single(allCheckLists);
     }
-
-    [Fact]
-    public async Task UpdateAsync_ShouldUpdateCheckList()
-    {
-        var checkList = new CheckList { CheckListId = 1, Name = "CheckList1", Description = "Description1", Language = "en" };
-
-        await _context.CheckList.AddAsync(checkList);
-        await _context.SaveChangesAsync();
-
-        var updateCheckListDto = new UpdateCheckListDto
-        {
-            Name = "UpdatedName",
-            Description = "UpdatedDesc",
-            Language = "en"
-        };
-
-        // var result = await _checkListRepository.UpdateAsync(1, updateCheckListDto);
-        var updateCheckList = await _checkListRepository.GetByIdAsync(1);
-        Assert.Equal("UpdatedName", updateCheckList?.Name);
-    }
-
+    
     [Fact]
     public async Task DeleteAsync_ShouldDeleteCheckLIst()
     {

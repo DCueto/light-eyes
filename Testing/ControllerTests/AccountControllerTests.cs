@@ -5,7 +5,9 @@ using light_eyes.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MockQueryable.Moq;
 using Moq;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 
 namespace Testing.ControllerTests;
@@ -19,15 +21,21 @@ public class AccountControllerTests
 
     public AccountControllerTests()
     {
+        var userStoreMock = new Mock<IUserStore<AppUser>>();
         _userManagerMock = new Mock<UserManager<AppUser>>(
-            new Mock<IUserStore<AppUser>>().Object, null, null, null, null, null, null, null, null);
+            userStoreMock.Object, null!, null!, null!, null!, null!, null!, null!, null!);
+
         _tokenserviceMock = new Mock<ITokenService>();
+
+        var contextAccessorMock = new Mock<IHttpContextAccessor>();
+        var userPrincipalFactoryMock = new Mock<IUserClaimsPrincipalFactory<AppUser>>();
 
         _signinManagerMock = new Mock<SignInManager<AppUser>>(
             _userManagerMock.Object,
-            new Mock<IHttpContextAccessor>().Object,
-            new Mock<IUserClaimsPrincipalFactory<AppUser>>().Object,
-            null,null,null,null);
+            contextAccessorMock.Object,
+            userPrincipalFactoryMock.Object,
+            null!, null!, null!, null!);
+
         _accountController = new AccountController(
             _userManagerMock.Object,
             _tokenserviceMock.Object,
@@ -38,13 +46,13 @@ public class AccountControllerTests
     public async Task Login_invalidModelState_ReturnsBadRequest()
     {
         _accountController.ModelState.AddModelError("UserName", "Required");
-
+    
         var result = await _accountController.Login(new LoginDto());
-
+    
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.IsType<SerializableError>(badRequestResult.Value);
     }
-
+    
     [Fact]
     public async Task Register_ValidData_ReturnsOkResult()
     {
@@ -54,34 +62,47 @@ public class AccountControllerTests
             Email = "test@test.com",
             Password = "P@ssw0rd"
         };
-
+    
         _userManagerMock.Setup(m => m.CreateAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);
         _userManagerMock.Setup(m => m.AddToRoleAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);
         _tokenserviceMock.Setup(m => m.CreateToken(It.IsAny<AppUser>()))
-            .Returns("testtoken");
-
+            .Returns(Task.FromResult("testToken"));
+    
         var result = await _accountController.Register(registerDto);
-
+    
         var okObjectResult = Assert.IsType<OkObjectResult>(result);
         var newUserDto = Assert.IsType<NewUserDto>(okObjectResult.Value);
         Assert.Equal(registerDto.UserName, newUserDto.UserName);
         Assert.Equal(registerDto.Email, newUserDto.Email);
-        Assert.Equal("testtoken", newUserDto.Token);
+        Assert.Equal("testToken", newUserDto.Token);
     }
-
+    
     [Fact]
     public async Task Register_InvalidModel_ReturnsBadRequest()
     {
         var registerDto = new RegisterDto();
         _accountController.ModelState.AddModelError("UserName", "UserName is required");
-
+    
         var result = await _accountController.Register(registerDto);
-
+    
         var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.IsType<SerializableError>(badRequestResult.Value);
     }
-
+    [Fact]
+    public async Task Login_UserNotFound_ReturnsUnauthorized()
+    {
+        
+        var users = new List<AppUser>().AsQueryable().BuildMock();
+        _userManagerMock.Setup(m => m.Users).Returns(users);
     
+        var loginDto = new LoginDto { UserName = "nonexistentUser", Password = "anyPassword" };
+        
+        var result = await _accountController.Login(loginDto);
+        
+        var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(result);
+        Assert.Equal("Invalid Username!", unauthorizedResult.Value);
+    }
 }
+
