@@ -35,5 +35,18 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=${DB_CONNECTION_STRING}
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - light-eyes-api
+    networks:
+      - light-eyes-net
+
 volumes:
   postgresql-container-data:

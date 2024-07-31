@@ -17,7 +17,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.7" />
-        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.0" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
         <PackageReference Include="MockQueryable.EntityFrameworkCore" Version="7.0.1" />
         <PackageReference Include="MockQueryable.Moq" Version="7.0.1" />
